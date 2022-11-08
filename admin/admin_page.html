@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang của Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/grid_lib.css">
+    <link rel="stylesheet" href="../style/base.css">    
+    <link rel="stylesheet" href="./admin_page.css">
+    <link rel="stylesheet" href="../style/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app_container">
+        <!-- side bar -->
+        <div class="sidebar">
+            <div class="sidebar_header">
+                <!-- logo/ svg here -->
+                <i class="fa-solid fa-gear"></i>
+                MyAdmin Page
+            </div>
+    
+            <div class="sidebar_menu">
+                <ul class="sidebar_menu-list">
+                    <li class="sidebar_menu-items category menu_active">
+                        <!-- icons, options here -->
+                        <i class="fa-solid fa-list"></i>
+                        Danh mục
+                    </li>
+                    <li class="sidebar_menu-items product">
+                        <!-- icons, options here -->
+                        <i class="fa-solid fa-box-open"></i>
+                        Sản phẩm
+                    </li>
+                    <li class="sidebar_menu-items ordernote">
+                        <!-- icons, options here -->
+                        <i class="fa-solid fa-clipboard"></i>
+                        Đơn hàng
+                    </li>
+                    <li class="sidebar_menu-items account">
+                        <!-- icons, options here -->
+                        <i class="fa-solid fa-users"></i>
+                        Tài khoản
+                    </li>
+                    <li class="sidebar_menu-items report">
+                        <!-- icons, options here -->
+                        <i class="fa-solid fa-chart-pie"></i>
+                        Thống kê
+                    </li>
+                    <li class="sidebar_menu-items logut">
+                        <!-- icons, options here -->
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        Đăng xuất
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="main_content">
+            <!-- category tab -->
+
+            <div class="tabs category_tab category tab_hide">
+                <div class="category_heading">
+                    <h3>Quản lý các danh mục</h3>
+                </div>
+                <div class="category_body">
+                    <div class="category_list_header">
+                        <div class="category_list_items">Mã danh mục</div>
+                        <div class="category_list_items">Tên danh mục</div>
+                        <div class="category_list_items" id="category_add_btn">Thêm danh mục</div>
+                    </div>
+                    <div class="category_list">
+                        <!-- render categories -->
+                    </div>
+                </div>
+                <!-- category modal -->
+                <div class="category_modal category_modal_hide">
+                    <div class="category_modal_form">
+                        <div class="form-group">
+                            <label for="category_id">Mã danh mục</label>
+                            <input class="form-input" type="text" id="category_id">
+                        </div>
+                        <div class="form-group">
+                            <label for="category_name">Tên danh mục</label>
+                            <input class="form-input" type="text" id="category_name">                        
+                        </div>
+                        <span class="messege"></span>
+                        <div class="form-btns">
+                            <button class="btn" id="category_confirm_btn">Xác nhận</button>
+                            <button class="btn" id="category_cancel_btn">Hủy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- products tab -->
+            <div class="tabs product_tab product tab_hide">
+                <div class="product_tab_heading">
+                    <h3>Quản lý sản phẩm</h3>
+                </div>
+                <div class="product_tab_body">
+                    <div class="product_list_header">
+                        <div class="product_list_items">Tên sản phẩm</div>
+                        <div class="product_list_items">Đơn giá</div>
+                        <div class="product_list_items">Tồn kho</div>
+                        <div id="product_add_btn" class="product_list_items">Thêm sản phẩm</div>
+                    </div>
+                    <div class="product_list">
+                        <!-- js render -->
+                    </div>
+                <!-- product modal -->
+                    <div class="product_modal product_modal_hide">
+                        <div class="product_modal_form">
+                            <div class="form-group">
+                                <span class="form-label" id="product_id"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product_name">Tên sản phẩm <span style="color: red;">(*)</span></label>
+                                <input class="form-input" type="text" id="product_name">        
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product_price">Đơn giá sản phẩm <span style="color: red;">(*)</span></label>
+                                <input class="form-input" type="text" id="product_price" placeholder="Định dạng: xxx.xxx.xxx">    
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product_quantity">Tồn kho <span style="color: red;">(*)</span></label>
+                                <input class="form-input" type="text" id="product_quantity"> 
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product_category_selection">Danh mục <span style="color: red;">(*)</span></label>
+                                <select id="product_category_selection">
+                                    <!-- <option value="" selected>1</option>
+                                    <option value="">2</option>
+                                    <option value="">3</option>
+                                    <option value="">4</option>
+                                    <option value="">5</option> -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product_img">Ảnh sản phẩm</label>
+                                <input class="form-input" type="file" accept="image/*" id="product_img"> 
+                            </div>
+                            <div class="form-group">
+                                <div class="img_review"></div>
+                            </div>
+                            <div class="form-btns">
+                                <button class="btn" id="product_confirm_btn">Xác nhận</button>
+                                <button class="btn" id="product_cancel_btn">Hủy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- order notes tab -->
+            <div class="tabs orderNote_tab ordernote tab_hide">
+                <div class="orderNoteTab_heading">
+                    <h3 class="orderNote_title">Danh sách các đơn hàng</h3>
+                    <div class="orderNote_filter">
+                        <label for="orderNote_time">Khoảng thời gian:</label>
+                        <input type="datetime-local" id="orderNote_time-from">
+                        đến
+                        <input type="datetime-local" id="orderNote_time-to">
+                        <button>Lọc</button>
+                    </div>
+                </div>
+                <div class="orderNoteTab_body">
+                    <div class="orderNote_list_header">
+                        <div class="orderNote_list_items">Mã đơn</div>
+                        <div class="orderNote_list_items">Thời gian</div>
+                        <div class="orderNote_list_items">Tình trạng</div>
+                        <div class="orderNote_list_items">Tổng tiền</div>
+                    </div>
+                    <div class="orderNote_list_content">
+                        <!-- render order notes -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- accounts tab -->
+            <!-- reports tab -->
+        </div>
+    </div>
+
+    <script src="./admin.js"></script>
+</body>
+</html>
