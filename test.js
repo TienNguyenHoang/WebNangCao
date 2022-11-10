@@ -1539,13 +1539,15 @@ function renderCategory(categoryList, categoryItems) {
 
 function changePageActive() {
     const pagesList = document.querySelectorAll(".page_list a");
-    pagesList[0].children[0].classList.add("page_list_item-active")
-    Array.from(pagesList).forEach((item) => {
-        item.addEventListener("click", () => {
-            pagesList.forEach((i)=>i.children[0].classList.remove("page_list_item-active"))
-            item.children[0].classList.add("page_list_item-active")
+    if(pagesList.length != 0) {
+        pagesList[0].children[0].classList.add("page_list_item-active")
+        Array.from(pagesList).forEach((item) => {
+            item.addEventListener("click", () => {
+                pagesList.forEach((i)=>i.children[0].classList.remove("page_list_item-active"))
+                item.children[0].classList.add("page_list_item-active")
+            })
         })
-    })
+    }
 }
 
 
