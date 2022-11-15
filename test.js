@@ -2395,5 +2395,3 @@ function renderOrderNoteList() {
     }
 
 }
-
-
