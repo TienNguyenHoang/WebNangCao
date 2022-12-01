@@ -104,6 +104,7 @@
                 </div>
                 <div class="product_tab_body">
                     <div class="product_list_header">
+                        <div class="product_list_items">Hình ảnh</div>
                         <div class="product_list_items">Tên sản phẩm</div>
                         <div class="product_list_items">Đơn giá</div>
                         <div class="product_list_items">Tồn kho</div>
@@ -112,33 +113,34 @@
                     <div class="product_list">
                         <!-- js render -->
                     </div>
-                <!-- product modal -->
+                    <!-- product modal -->
                     <div class="product_modal product_modal_hide">
-                        <div class="product_modal_form">
+                        <form action="" method="post" class="product_modal_form">
                             <div class="form-group">
-                                <span class="form-label" id="product_id"></span>
+                                <span class="form-label">ID Sản phẩm: <span id="product_id"></span></span>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="product_name">Tên sản phẩm <span style="color: red;">(*)</span></label>
-                                <input class="form-input" type="text" id="product_name">        
+                                <textarea class="form-input" type="text" id="product_name" required style="height: 50px;"></textarea>       
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="product_price">Đơn giá sản phẩm <span style="color: red;">(*)</span></label>
-                                <input class="form-input" type="text" id="product_price" placeholder="Định dạng: xxx.xxx.xxx">    
+                                <input class="form-input" type="number" id="product_price" placeholder="Định dạng: xxx.xxx.xxx" required>    
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="product_quantity">Tồn kho <span style="color: red;">(*)</span></label>
-                                <input class="form-input" type="text" id="product_quantity"> 
+                                <input class="form-input" type="number" id="product_quantity" required> 
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="product_category_selection">Danh mục <span style="color: red;">(*)</span></label>
                                 <select id="product_category_selection">
-                                    <!-- <option value="" selected>1</option>
-                                    <option value="">2</option>
-                                    <option value="">3</option>
-                                    <option value="">4</option>
-                                    <option value="">5</option> -->
+                                    <!-- <option value="user">Khách hàng</option>
+                                    <option value="adminastrator">Quản trị</option> -->
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="product_quantity">Mô tả <span style="color: red;">(*)</span></label>
+                                <textarea class="form-input" type="text" id="product_description" required style="height: 90px;"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="product_img">Ảnh sản phẩm</label>
@@ -148,10 +150,10 @@
                                 <div class="img_review"></div>
                             </div>
                             <div class="form-btns">
-                                <button class="btn" id="product_confirm_btn">Xác nhận</button>
+                                <button type="submit" class="btn" id="product_confirm_btn">Xác nhận</button>
                                 <button class="btn" id="product_cancel_btn">Hủy</button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -181,6 +183,50 @@
             </div>
 
             <!-- accounts tab -->
+            <div class="tabs account_tab account tab_hide">
+                <div class="account_tab_heading">
+                    <h3>Quản lý Người dùng</h3>
+                </div>
+                <div class="account_tab_body">
+                    <div class="account_list_header">
+                        <div class="account_list_items">Tên tài khoản</div>
+                        <div class="account_list_items">Phân quyền</div>
+                        <div class="account_list_items">Thông tin</div>
+                        <div id="account_add_btn" class="account_list_items">Thêm người dùng</div>
+                    </div>
+                    <div class="account_list">
+                        <!-- js render -->
+                    </div>
+                    <!-- account's modal -->
+                    <div class="account_modal account_modal_hide">
+                        <form action="" method="post" class="account_modal_form">
+                            <div class="form-group">
+                                <label class="form-label" for="account_id">Tên tài khoản <span style="color: red;">(*)</span></label>
+                                <input class="form-input" type="text" id="account_id" required>    
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account_email">Email <span style="color: red;">(*)</span></label>
+                                <input class="form-input" type="text" id="account_email" required>    
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account_pass">Mật khẩu <span style="color: red;">(*)</span></label>
+                                <input class="form-input" type="text" id="account_pass" required>  
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account_type_selection">Loại tài khoản <span style="color: red;">(*)</span></label>
+                                <select id="account_type_selection">
+                                    <option value="0" selected>Khách hàng</option>
+                                    <option value="1">Quản trị</option>
+                                </select>
+                            </div>
+                            <div class="form-btns">
+                                <button type="submit" class="btn" id="account_confirm_btn">Xác nhận</button>
+                                <button class="btn" id="account_cancel_btn">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!-- reports tab -->
         </div>
     </div>

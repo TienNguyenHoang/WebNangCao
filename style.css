@@ -604,13 +604,12 @@ li {
 .product_items {
     background-color: var(--white-color);
     border-radius: 5px;
-    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.4);
+    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.4);
     padding-bottom: 10px;
     position: relative;
     transition: top linear 0.2s, left linear 0.2s;
     top: 0;
     left: 0;
-    background-color: var(--white-color);
     z-index: 1;
 }
 

@@ -1341,7 +1341,7 @@ function category(categoryID, categoryName) {
     this.categoryName = categoryName;
 }
 
-categoriesDB = [
+let categoriesDB = [
     new category("1", "Acer"),
     new category("2", "MSI"),
     new category("3", "Asus"),
@@ -1350,20 +1350,31 @@ categoriesDB = [
     new category("6", "Dell"),
 ]
 
+function account(username, pass, type, email){
+    this.username = username;
+    this.password = pass;
+    this.type = type;
+    this.email = email
+}
+
+let accountDB = [
+    new account("admin", "123456", 1, "tnvt@gmail.com"),
+    new account("vietthai", "123456", 0, "testemail@gmail.com"),
+    new account("vietthai2", "123456", 0, "testemail2@gmail.com"),
+    new account("vietthai3", "123456", 0, "testemail3@gmail.com")
+]
+
 // ============================================ //
 // -------------- LOCALSTORAGE ---------------- //
 // ============================================ //
 
-
 let accountStateInit = -1;   // xác định user id nào đang log in
-let userAccounts;
+let userAccounts = localStorage.getItem("userAccounts") ? JSON.parse(localStorage.getItem("userAccounts")) : accountDB;
 let cart_products;
 let orderNoteList = localStorage.getItem("orderNoteList") ? JSON.parse(localStorage.getItem("orderNoteList")) : [];
 let products = localStorage.getItem("products") ? JSON.parse(localStorage.getItem("products")) : productsDB;
 let categories = localStorage.getItem("categories") ? JSON.parse(localStorage.getItem("categories")) : categoriesDB;
 let accountState = localStorage.getItem("accountState") ? JSON.parse(localStorage.getItem("accountState")) : accountStateInit;
-
-// console.log(categories)
 
 
 
@@ -1387,8 +1398,7 @@ window.addEventListener('DOMContentLoaded', () => {
     filterByPrice(products, ".filter_item-priceOption");
     productDetailNaviagte();
     if(accountState !== -1) {
-        let userAccs = JSON.parse(localStorage.getItem("userAccounts"));
-        let account = userAccs.find((item) => item.username === accountState);
+        let account = userAccounts.find((item) => item.username === accountState);
         renderAccountOnMobile(account)
         renderAccountOnPC(account)
     }
@@ -1429,6 +1439,7 @@ function renderProduct(productList, s, e) {
                 item.onclick = function(e) {e.preventDefault()}
             })
             addToCart();
+            productDetailNaviagte()
         }
     })
 }
@@ -1735,7 +1746,7 @@ function emailValid() {
     let value = email.value;
     let messege1 = value ? true : false;
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    let messege2 = regex.test(value) ? true : false;
+    let messege2 = regex.test(value);
     const form_group = getParentElement(email, ".form-group");
     const errorSpan = form_group.querySelector(".form-messege");
     if(!messege1) {
@@ -1959,7 +1970,6 @@ function increaseQuantity() {
         }
     })
 }
-
 // ============================================================ //
 // ------------------------ SEARCHING ------------------------- //
 // ============================================================ //
@@ -1969,9 +1979,9 @@ function search() {
     const searchBtn = document.querySelector(".search_btn");
 
     searchBtn.onclick = function() {
-        let searchValue = searchInput.value;
+        let searchValue = searchInput.value.toLowerCase();
         let searchResultProducts = products.filter(function(item) {
-            return item.name.includes(searchValue);
+            return item.name.toLowerCase().includes(searchValue);
         })
         start = 0;
         end = itemPerPage;
@@ -2052,9 +2062,21 @@ function filterByPrice(arrProducts, options) {
 // ================================================================================== //
 // ----------------------- Sign up: Stored User account ---------------------------- //
 // --------------------- Login: render account's view ----------------------------- //
-// -------------------------- Logout: render view --------------------------------- //
+// -------------------------- Logout: render stranger's view --------------------------------- //
 // =============================================================================== //
 
+
+// function stringToHex(str) {
+//     var arr = [];
+//     for (var i = 0; i < str.length; i++) {
+//            arr[i] = ("00" + str.charCodeAt(i).toString(16)).slice(-4);
+//     }
+//     return "\\u" + arr.join("\\u");
+// }
+
+// function hexToString(str) {
+//     return unescape(str.replace(/\\/g, "%"));
+// }
 
 signUpForm.onsubmit = function(e) {
     e.preventDefault();
@@ -2063,7 +2085,6 @@ signUpForm.onsubmit = function(e) {
     const check3 = passwordValid();
     const check4 = confirmPassWordValid();
     if (check1 && check2 && check3 && check4) {
-        userAccounts = localStorage.getItem("userAccounts") ? JSON.parse(localStorage.getItem("userAccounts")) : [];
         let flag = userAccounts.some(function(item) {
             return item.username === username.value
         })
@@ -2072,6 +2093,8 @@ signUpForm.onsubmit = function(e) {
             let user = {
                 username: username.value,
                 password: password.value,
+                type: 0,   // O: customer, 1:admin
+                email: email.value
             }
             desc.innerHTML = "Tạo tài khoản thành công!";
             desc.style.color = "#1dbfaf";
@@ -2088,19 +2111,23 @@ signUpForm.onsubmit = function(e) {
 }
 
 logInFrom.onsubmit = function(e) {
-    e.preventDefault();
-    userAccounts = localStorage.getItem("userAccounts") ? JSON.parse(localStorage.getItem("userAccounts")) : [];
-    let admin = (username_login.value === "admin" && username_pass.value === "admin");
+    e.preventDefault()
+    const pass = username_pass.value
     let acc = userAccounts.find(function(item) {
-        return (item.username === username_login.value && item.password === username_pass.value);
+        return (item.username === username_login.value && item.password === pass);
     });
-    if(admin) {
-        // chuyen den trang cho admin
-        localStorage.setItem("products", JSON.stringify(products));
-        localStorage.setItem("categories", JSON.stringify(categories));
-        window.location.href = "./admin/admin_page.html"
+    if(acc.type == 1) {   // admin 
+        accountState = acc.username;
+        localStorage.setItem("accountState", JSON.stringify(accountState));
+        desc.innerHTML = "Đăng nhập thành công!";
+        desc.style.color = "#1dbfaf";
+        setTimeout(() => {
+            signUpModal.classList.add("signUp_modal-hide");
+        }, 1000);
+        renderAccountOnPC(acc);
+        renderAccountOnMobile(acc);
     }
-    else if(acc) {   // trang cho user
+    else if(acc.type == 0) {   //  user
         accountState = acc.username;
         localStorage.setItem("accountState", JSON.stringify(accountState));
         desc.innerHTML = "Đăng nhập thành công!";
@@ -2117,20 +2144,28 @@ logInFrom.onsubmit = function(e) {
     }
 }
 
-function renderAccountOnPC(userAcc) {
+function renderAccountOnPC(acc) {
     const headerList2 = getParentElement(loginBtns[0], ".header_list");
     const userDiv = headerList2.querySelector(".user_account-pc");
     loginBtns.forEach(function(item) {item.classList.add("loginSuccess")});
     userDiv.classList.remove("loginSuccess");
-    userDiv.children[1].innerText = `${userAcc.username}`
+    userDiv.children[1].innerText = `${acc.username}`
+    if(acc.type == 1){
+        const adminPage = document.querySelectorAll(".administrator_page")
+        adminPage.forEach((item)=>{item.classList.remove("loginSuccess")})
+    }
 }
 
-function renderAccountOnMobile(userAcc) {
+function renderAccountOnMobile(acc) {
     const moblieModalList = document.querySelector(".hambugerlist_modal-list");
     const userDivs = moblieModalList.querySelectorAll(".user_account-mobile");
     loginBtns.forEach(function(item) {item.classList.add("loginSuccess")});
     userDivs.forEach(function(item) {item.classList.remove("loginSuccess")});
-    userDivs[0].children[1].innerText = `${userAcc.username}`
+    userDivs[0].children[1].innerText = `${acc.username}`
+    if(acc.type == 1){
+        const adminPage = document.querySelectorAll(".administrator_page")
+        adminPage.forEach((item)=>{item.classList.remove("loginSuccess")})
+    }
 }
 
 const logOutBtns = document.querySelectorAll(".logout_btn");
@@ -2139,13 +2174,26 @@ logOutBtns.forEach(function(item) {
         if(accountState !== -1){
             accountState = -1;
             localStorage.setItem("accountState", JSON.stringify(accountState));
-            const userDiv = document.querySelector(".user_account-pc");
-            const userDivs = document.querySelectorAll(".user_account-mobile");
-            userDiv.classList.add("loginSuccess");
-            userDivs.forEach(function(item) {item.classList.add("loginSuccess")});
+            const userDivPC = document.querySelector(".user_account-pc");
+            const userDivsMoblie = document.querySelectorAll(".user_account-mobile");
+            const adminPage = document.querySelectorAll(".administrator_page")
+            userDivPC.classList.add("loginSuccess");
+            userDivsMoblie.forEach(function(item) {item.classList.add("loginSuccess")});
             loginBtns.forEach(function(item) {item.classList.remove("loginSuccess")});
+            adminPage.forEach((item)=>{item.classList.add("loginSuccess")})
         }
 
+    }
+})
+
+const adminPage = document.querySelectorAll(".administrator_page")
+adminPage.forEach((item)=>{
+    item.onclick=()=>{
+        // chuyen den trang cho admin
+        localStorage.setItem("products", JSON.stringify(products)) // chay lan dau, chua mua hang
+        localStorage.setItem("categories", JSON.stringify(categories)) // chay lan dau, chua vao trang admin
+        localStorage.setItem("userAccounts", JSON.stringify(userAccounts)) // chay lan dau, chua dang ky tk moi
+        window.location.href = "./admin/admin_page.html"
     }
 })
 
@@ -2170,9 +2218,15 @@ confirmBuyFormCloseBtn.onclick = function() {
 function createBuyForm() {
     const confirmBuyBtn = document.querySelector(".cart_confirm-btn");
     confirmBuyBtn.onclick = function() {
+        const currentAcc = userAccounts.find((item)=>{
+            return item.username == accountState
+        })
         if(accountState == -1) {
             // chua dang nhap
             renderSignUpForm();
+        }
+        else if(currentAcc.type == 1) {
+            alert("Vui lòng không sử dụng tài khoản của người quản trị để mua hàng!")
         }
         else {
             customername.value = ""
