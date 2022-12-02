@@ -1993,6 +1993,25 @@ function search() {
         filterByPrice(searchResultProducts, ".filter_item-priceOption");
         productDetailNaviagte()
     }
+
+    searchInput.addEventListener("keydown", function(event) {
+        if (event.key ==="Enter") {
+            event.preventDefault();
+            let searchValue = searchInput.value.toLowerCase();
+            let searchResultProducts = products.filter(function(item) {
+                return item.name.toLowerCase().includes(searchValue);
+            })
+            start = 0;
+            end = itemPerPage;
+            totalPages = Math.ceil(searchResultProducts.length / itemPerPage);
+            renderPagesList(totalPages);
+            renderProduct(searchResultProducts, start, end);
+            changePage(searchResultProducts);
+            filterByPrice(searchResultProducts, ".price_items");
+            filterByPrice(searchResultProducts, ".filter_item-priceOption");
+            productDetailNaviagte()
+        }
+    });
 }
 
 // search();
