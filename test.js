@@ -2129,37 +2129,95 @@ signUpForm.onsubmit = function(e) {
     
 }
 
+// logInFrom.onsubmit = function(e) {
+//     e.preventDefault()
+//     const pass = username_pass.value
+//     let acc = userAccounts.find(function(item) {
+//         return (item.username === username_login.value && item.password === pass);
+//     });
+//     if(acc.type == 1) {   // admin 
+//         accountState = acc.username;
+//         localStorage.setItem("accountState", JSON.stringify(accountState));
+//         desc.innerHTML = "Đăng nhập thành công!";
+//         desc.style.color = "#1dbfaf";
+//         setTimeout(() => {
+//             signUpModal.classList.add("signUp_modal-hide");
+//         }, 1000);
+//         renderAccountOnPC(acc);
+//         renderAccountOnMobile(acc);
+//     }
+//     else if(acc.type == 0) {   //  user
+//         accountState = acc.username;
+//         localStorage.setItem("accountState", JSON.stringify(accountState));
+//         desc.innerHTML = "Đăng nhập thành công!";
+//         desc.style.color = "#1dbfaf";
+//         setTimeout(() => {
+//             signUpModal.classList.add("signUp_modal-hide");
+//         }, 1000);
+//         renderAccountOnPC(acc);
+//         renderAccountOnMobile(acc);
+//     }
+//     else {
+//         desc.innerHTML = "Tài khoản hoặc mật khẩu sai, Đăng ký mới?";
+//         desc.style.color = "red";
+//     }
+// }
+
 logInFrom.onsubmit = function(e) {
     e.preventDefault()
     const pass = username_pass.value
     let acc = userAccounts.find(function(item) {
         return (item.username === username_login.value && item.password === pass);
     });
-    if(acc.type == 1) {   // admin 
-        accountState = acc.username;
-        localStorage.setItem("accountState", JSON.stringify(accountState));
-        desc.innerHTML = "Đăng nhập thành công!";
-        desc.style.color = "#1dbfaf";
-        setTimeout(() => {
-            signUpModal.classList.add("signUp_modal-hide");
-        }, 1000);
-        renderAccountOnPC(acc);
-        renderAccountOnMobile(acc);
-    }
-    else if(acc.type == 0) {   //  user
-        accountState = acc.username;
-        localStorage.setItem("accountState", JSON.stringify(accountState));
-        desc.innerHTML = "Đăng nhập thành công!";
-        desc.style.color = "#1dbfaf";
-        setTimeout(() => {
-            signUpModal.classList.add("signUp_modal-hide");
-        }, 1000);
-        renderAccountOnPC(acc);
-        renderAccountOnMobile(acc);
-    }
-    else {
-        desc.innerHTML = "Tài khoản hoặc mật khẩu sai, Đăng ký mới?";
+    if(username_login.value == false && pass==false)
+    {
+        desc.innerHTML = "Mời nhập tài khoản và mật khẩu";
         desc.style.color = "red";
+    }
+    else{
+        if (pass==false) {
+            desc.innerHTML = "Mời nhập mật khẩu";
+            desc.style.color = "red";
+            username_pass.classList.add("form-input-active");
+        }
+        else{
+            if(username_login.value==false)
+            {
+                desc.innerHTML = "Mời nhập tài khoản";
+                desc.style.color= "red";
+                username_login.classList.add("form-input-active");
+            }
+            else{ 
+                if(acc!=null){
+                    if(acc.type == 1) {   // admin 
+                        accountState = acc.username;
+                        localStorage.setItem("accountState", JSON.stringify(accountState));
+                        desc.innerHTML = "Đăng nhập thành công!";
+                        desc.style.color = "#1dbfaf";
+                        setTimeout(() => {
+                            signUpModal.classList.add("signUp_modal-hide");
+                        }, 1000);
+                        renderAccountOnPC(acc);
+                        renderAccountOnMobile(acc);
+                    }
+                    else if(acc.type == 0) {   //  user
+                        accountState = acc.username;
+                        localStorage.setItem("accountState", JSON.stringify(accountState));
+                        desc.innerHTML = "Đăng nhập thành công!";
+                        desc.style.color = "#1dbfaf";
+                        setTimeout(() => {
+                            signUpModal.classList.add("signUp_modal-hide");
+                        }, 1000);
+                        renderAccountOnPC(acc);
+                        renderAccountOnMobile(acc);
+                    }
+                }
+                else {
+                    desc.innerHTML = "Tài khoản hoặc mật khẩu sai, Đăng ký mới?";
+                    desc.style.color = "red";
+                }
+            }
+        }
     }
 }
 
