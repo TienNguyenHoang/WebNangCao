@@ -1468,7 +1468,7 @@ li {
 /* --------------------------- */
 /* css footer Nguyen Ngoc Sang */
 /* --------------------------- */
-.main-footer{
+.app_footer{
     display: flex;
     background: var(--primary-color);
 }
@@ -1480,11 +1480,11 @@ li {
     align-content: center;
     padding-top: 20px;
 }
-.main-footer a:hover{
+.app_footer a:hover{
     text-decoration: underline;
     font-weight: bold;
 }
-.main-footer ul li{
+.app_footer ul li{
     padding-top: 10px;
 }
 .img-footer{

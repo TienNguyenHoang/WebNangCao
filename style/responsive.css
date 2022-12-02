@@ -191,6 +191,25 @@
     }
 }
 
+/* for laptop L */
+@media (min-width: 1024px) and (max-width: 1340px) {
+    .hide_on_pc {
+        display: none;
+    }
+    .main-footer-content{
+        justify-content: flex-start;
+    }
+    .img-footer{
+        width: 30%;
+        border-left: 1px solid black;
+    }
+    .informations-footer{
+        width: 30%;
+    }
+    .map-footer{
+        width: 25%;
+    }
+}
 
 /* for pc and up */
 @media (min-width: 1024px) {
