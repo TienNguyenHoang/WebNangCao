@@ -38,7 +38,7 @@
 }
 
 .grid2 {
-    margin: 8% auto 0;
+    margin: 6% auto 0;
 }
 
 .product-img {
@@ -125,7 +125,7 @@
 .slider {
     width: 1200px;
     overflow:  hidden;
-    margin-top: 20px;
+    margin: 20px 0 60px 0;
 }
 
 .slides {
@@ -142,6 +142,7 @@
     background-color: var(--white-color);
     padding: 5px;
     border-radius: 5px;
+    text-align: center;
 }
 
 .rcm-product-img {
@@ -165,26 +166,22 @@
 .rcm-product-price {
     color: var(--theme-color);
     font-size: 1.4rem;
-    margin-top: 5px;
+    margin: 5px 0;
 }
 
-.rcm-product-btns {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.rcm-product-addBtn, .rcm-product-detailsBtn {
+.rcm-product-detailsBtn {
     background-color: var(--theme-color);
     color: var(--white-color);
     font-size: 2rem;
-    width: 50px;
+    width: 60px;
     height: 30px;
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: calc(224px / 2);
+    transform: translateX(-50%);
+    cursor: pointer;
 }
 
 .recommend-header {

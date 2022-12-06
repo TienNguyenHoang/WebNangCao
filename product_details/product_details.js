@@ -41,7 +41,7 @@ const slides = document.querySelector(".slides")
 
 function recommendSlider() {
     const slide = document.querySelectorAll(".slide")
-    const length = slide.length // so luong rcm product
+    const length = slide.length // so luong rcm product (8)
     const sub = length - 5 // so luong rcm co dinh tren UI la 5(chua co response)
     const width = 240 // chieu ngang cua mot o rcm product
     let marginLeft = 0
@@ -71,22 +71,22 @@ function recommendSlider() {
 
 
 function renderRecommend(){
-    const arr = products.filter((item) => {
-        return item.categoryID === product.categoryID && Math.abs(parseInt(item.price.replace(/[ .đ]/gm,''))-parseInt(product.price.replace(/[ .đ]/gm,'')))<5000000
+    let arr = products.filter((item) => {
+        return Math.abs(parseInt(item.price.replace(/[ .đ]/gm,''))-parseInt(product.price.replace(/[ .đ]/gm,'')))<5000000 && item.id!=product.id
     });
+    if(arr.length<8){
+      arr = arr.concat(products.filter((item)=>{return item.categoryID == product.categoryID && !arr.includes(item.id)}))
+    }
     const recommendArr = arr.slice(0, 8); // recommend toi da 8 sp
 
     let str = ""
     recommendArr.forEach((item) => {
         str += `
-        <div class="slide">
+        <div class="slide" data-id="${item.id}">
             <div class="rcm-product-img" style="background-image: url(.${item.background_image})"></div>
             <div class="rcm-product-name">${item.name}</div>
             <div class="rcm-product-price">${item.price}</div>
-            <div class="rcm-product-btns">
-                <div class="rcm-product-addBtn"><i class="fa-solid fa-cart-shopping"></i></div>
-                <div class="rcm-product-detailsBtn"><i class="fa-solid fa-magnifying-glass"></i></div>
-            </div>
+            <div class="rcm-product-detailsBtn"><i class="fa-solid fa-magnifying-glass"></i></div>
         </div>
         `
     });
@@ -288,3 +288,13 @@ cartBtn.onclick = function () {
   cartBox.classList.toggle("cart_box-hide");
 }
 
+
+// Click chi tiet san pham o phan recommend //
+
+const rcm_btns = document.querySelectorAll(".rcm-product-detailsBtn")
+rcm_btns.forEach((item)=>{
+  item.onclick=()=>{
+    const productId = getParentElement(item, ".slide").getAttribute("data-id")
+    window.location.href = `./product_details.html?product_id=${productId}`;
+  }
+})

@@ -1364,6 +1364,8 @@ let accountDB = [
     new account("vietthai3", "123456", 0, "testemail3@gmail.com")
 ]
 
+
+
 // ============================================ //
 // -------------- LOCALSTORAGE ---------------- //
 // ============================================ //
@@ -1393,7 +1395,7 @@ window.addEventListener('DOMContentLoaded', () => {
     changeCategory(categories, ".category_items-link")
     changeCategory(categories, ".mobile_category-link")
     addToCart()
-    search();
+    search(products);
     filterByPrice(products, ".price_items");
     filterByPrice(products, ".filter_item-priceOption");
     productDetailNaviagte();
@@ -1402,8 +1404,15 @@ window.addEventListener('DOMContentLoaded', () => {
         renderAccountOnMobile(account)
         renderAccountOnPC(account)
     }
+    scrolltoTop()
 });
 
+
+window.addEventListener("scroll", function(e){
+    let top = this.scrollY
+    if(top<400) document.querySelector("#scroll_top_btn").style.display = "none"
+    else document.querySelector("#scroll_top_btn").style.display = "unset"
+})
 
 // =================================================== //
 // ------------------- PAGINATION -------------------- //
@@ -1449,7 +1458,7 @@ function renderPagesList(total) {
     let str = '';
     for(let i=1; i<=total; i++) {
         str+= `
-            <a href="#">
+            <a href="">
                 <li class="page_list-items">${i}</li>
             </a>
         `;
@@ -1463,7 +1472,8 @@ function renderPagesList(total) {
 function changePage(productList) {
     const pagesList = document.querySelectorAll(".page_list a");
     pagesList.forEach(function (item, index) {
-        item.addEventListener("click", () => {
+        item.addEventListener("click", (evt) => {
+            evt.preventDefault()
             let value = index+1;
             currentPage = value
             s = (currentPage-1)*itemPerPage;
@@ -1487,6 +1497,10 @@ function changeCategory(categoryArr, categorieItems) {
     items.forEach(function(item) {
         item.addEventListener("click", function(e) {
             e.preventDefault();
+            searchValue = ""
+            priceStart = undefined
+            priceEnd = undefined
+            resetShowReusltSearchAndFilter()
             const categoryID = item.parentElement.getAttribute("data-cateID");
             if(categoryID === "all") {
                 start=0;
@@ -1496,6 +1510,7 @@ function changeCategory(categoryArr, categorieItems) {
                 renderPagesList(totalPages);
                 renderProduct(products, start, end);
                 changePage(products);
+                search(products)
                 filterByPrice(products, ".price_items");
                 filterByPrice(products, ".filter_item-priceOption");
                 productDetailNaviagte()
@@ -1509,6 +1524,7 @@ function changeCategory(categoryArr, categorieItems) {
                 renderPagesList(totalPages);
                 renderProduct(categorieProducts, start, end);
                 changePage(categorieProducts);
+                search(categorieProducts)
                 filterByPrice(categorieProducts, ".price_items");
                 filterByPrice(categorieProducts, ".filter_item-priceOption");
                 productDetailNaviagte()
@@ -1521,7 +1537,6 @@ function changeCategory(categoryArr, categorieItems) {
 
 function renderCategory(categoryList, categoryItems) {
     const list = document.querySelector(`.${categoryList}`);
-    // console.log(list)
     let str = categoryList === "mobile_category-list" ? `<li class="mobile_category-items" data-cateid="all"><a href="" class="mobile_category-link">Tất cả</a></li>` 
     : `<li class="category_items" data-cateid="all"><a href="" class="category_items-link">Tất cả</a></li>`;
     categories.forEach(function(item, index) {
@@ -1546,6 +1561,14 @@ function renderCategory(categoryList, categoryItems) {
 // ----------------------- JS Interact Anmaitions ----------------------- //
 // ===================================================================== //
 
+// ---------------------- Scroll to top ------------------------- //
+function scrolltoTop(){
+    const scrolltoTopBtn = document.querySelector("#scroll_top_btn")
+    scrolltoTopBtn.onclick=()=>{
+        window.scrollTo({top: 0, behavior: 'smooth'})
+    }
+}
+
 // --------------------- Change Pages ------------------------- //
 
 function changePageActive() {
@@ -1556,6 +1579,7 @@ function changePageActive() {
             item.addEventListener("click", () => {
                 pagesList.forEach((i)=>i.children[0].classList.remove("page_list_item-active"))
                 item.children[0].classList.add("page_list_item-active")
+                window.scrollTo({top: 650, behavior: 'smooth'})
             })
         })
     }
@@ -1931,16 +1955,15 @@ function decreaseQuantity() {
     const increaseBtns = document.querySelectorAll(".decrease");
     increaseBtns.forEach(function(item) {
         item.onclick = function() {
-            const cartItem = getParentElement(item, ".cart_items");
-            const productID = cartItem.getAttribute("data-id");
+            const productID = getParentElement(item, ".cart_items").getAttribute("data-id");
             const index = cart_products.findIndex(function(i) {return i.id === productID});
-            if(cart_products[index].quantity > 0) {
+            if(cart_products[index].quantity > 1) {
                 cart_products[index].quantity -=1;
                 cart_products[index].totalPrice = cart_products[index].quantity*cart_products[index].price;
             }
             else {
-                cart_products[index].quantity = 0;
-                cart_products[index].totalPrice = cart_products[index].quantity*cart_products[index].price;
+                cart_products[index].quantity = 1;
+                cart_products[index].totalPrice = cart_products[index].price;
             }
             item.parentElement.children[1].innerText = cart_products[index].quantity;
             cartItem.children[1].children[2].innerText = cart_products[index].totalPrice + " đ";
@@ -1953,8 +1976,7 @@ function increaseQuantity() {
     const decreaseBtns = document.querySelectorAll(".increase");
     decreaseBtns.forEach(function(item) {
         item.onclick = function() {
-            const cartItem = getParentElement(item, ".cart_items");
-            const productID = cartItem.getAttribute("data-id");
+            const productID = getParentElement(item, ".cart_items").getAttribute("data-id");
             const index = cart_products.findIndex(function(i) {return i.id === productID});
             const productQuantity = products.find(function(i) {return i.id === productID}).quantity;
             if((cart_products[index].quantity + 1) > productQuantity) {
@@ -1974,14 +1996,20 @@ function increaseQuantity() {
 // ------------------------ SEARCHING ------------------------- //
 // ============================================================ //
 
-function search() {
+// biến global
+let searchValue = ""
+
+function search(arrProducts) {
     const searchInput = document.querySelector(".header_searchbar-input");
     const searchBtn = document.querySelector(".search_btn");
 
     searchBtn.onclick = function() {
-        let searchValue = searchInput.value.toLowerCase();
-        let searchResultProducts = products.filter(function(item) {
-            return item.name.toLowerCase().includes(searchValue);
+        searchValue = searchInput.value
+        let searchResultProducts = arrProducts.filter(function(item) {
+            const value = parseInt(item.price.replace(/[ .đ]/gm,''))
+            let s = (priceStart==undefined) ? 0 : priceStart
+            let e = (priceEnd==undefined) ? value : priceEnd
+            return item.name.toLowerCase().includes(searchValue.toLowerCase()) && value>=s && value<=e
         })
         start = 0;
         end = itemPerPage;
@@ -1989,17 +2017,20 @@ function search() {
         renderPagesList(totalPages);
         renderProduct(searchResultProducts, start, end);
         changePage(searchResultProducts);
-        filterByPrice(searchResultProducts, ".price_items");
-        filterByPrice(searchResultProducts, ".filter_item-priceOption");
+        showResultSearchAndFilter()
         productDetailNaviagte()
+        window.scrollTo({top: 700, behavior: 'smooth'})
     }
 
     searchInput.addEventListener("keydown", function(event) {
         if (event.key ==="Enter") {
             event.preventDefault();
-            let searchValue = searchInput.value.toLowerCase();
-            let searchResultProducts = products.filter(function(item) {
-                return item.name.toLowerCase().includes(searchValue);
+            searchValue = searchInput.value
+            let searchResultProducts = arrProducts.filter(function(item) {
+                const value = parseInt(item.price.replace(/[ .đ]/gm,''))
+                let s = (priceStart==undefined) ? 0 : priceStart
+                let e = (priceEnd==undefined) ? value : priceEnd
+                return item.name.toLowerCase().includes(searchValue.toLowerCase()) && value>=s && value<=e
             })
             start = 0;
             end = itemPerPage;
@@ -2007,75 +2038,59 @@ function search() {
             renderPagesList(totalPages);
             renderProduct(searchResultProducts, start, end);
             changePage(searchResultProducts);
-            filterByPrice(searchResultProducts, ".price_items");
-            filterByPrice(searchResultProducts, ".filter_item-priceOption");
+            showResultSearchAndFilter()
             productDetailNaviagte()
+            window.scrollTo({top: 700, behavior: 'smooth'})
         }
     });
 }
 
-// search();
+function showResultSearchAndFilter(){
+    const reusltDiv = document.querySelector("#searchAndFilterResult")
+    reusltDiv.innerText = `Kết quả tìm kiếm ${searchValue=="" ? "" : "cho: "+searchValue+","} Khoảng giá: ${priceStart==undefined? "": "từ "+priceStart+ "đ"} ${priceEnd==undefined? "tất cả" : "đến "+priceEnd+" đ"}`
+}
 
+function resetShowReusltSearchAndFilter(){
+    const reusltDiv = document.querySelector("#searchAndFilterResult")
+    reusltDiv.innerText = ""
+}
 
 // ============================================================ //
 // ------------------------- FILTERS -------------------------- //
 // ============================================================ //
 
-function filterByPrice(arrProducts, options) {
-    const priceOptions = document.querySelectorAll(options);
-    priceOptions[0].onclick = function() {
-        let filterPriceProducts = arrProducts.filter(function(item) {
-            const value = parseInt(item.price.replace(/[ .đ]/gm,''))
-            return value < 10000000
-        })
-        console.log(filterPriceProducts)
-        start = 0;
-        end = itemPerPage;
-        totalPages = Math.ceil(filterPriceProducts.length / itemPerPage);
-        renderPagesList(totalPages);
-        renderProduct(filterPriceProducts, start, end);
-        changePage(filterPriceProducts);
-        productDetailNaviagte();
-    }
-    priceOptions[1].onclick = function() {
-        let filterPriceProducts = arrProducts.filter(function(item) {
-            const value = parseInt(item.price.replace(/[ .đ]/gm,''));
-            return value > 10000000 && value < 20000000 
-        });
-        start = 0;
-        end = itemPerPage;
-        totalPages = Math.ceil(filterPriceProducts.length / itemPerPage);
-        renderPagesList(totalPages);
-        renderProduct(filterPriceProducts, start, end);
-        changePage(filterPriceProducts);
-        productDetailNaviagte();
-    }
-    priceOptions[2].onclick = function() {
-        let filterPriceProducts = arrProducts.filter(function(item) {
-            const value = parseInt(item.price.replace(/[ .đ]/gm,''));
-            return value > 20000000 && value < 30000000
-        });
-        start = 0;
-        end = itemPerPage;
-        totalPages = Math.ceil(filterPriceProducts.length / itemPerPage);
-        renderPagesList(totalPages);
-        renderProduct(filterPriceProducts, start, end);
-        changePage(filterPriceProducts);
-        productDetailNaviagte();
-    }
-    priceOptions[3].onclick = function() {
-        let filterPriceProducts = arrProducts.filter(function(item) {return parseInt(item.price.replace(/[ .đ]/gm,'')) > 30000000})
-        start = 0;
-        end = itemPerPage;
-        totalPages = Math.ceil(filterPriceProducts.length / itemPerPage);
-        renderPagesList(totalPages);
-        renderProduct(filterPriceProducts, start, end);
-        changePage(filterPriceProducts);
-        productDetailNaviagte();
-    }
+// global scope
+let priceStart
+let priceEnd
+
+function filter(arrProducts, priceRangeStart, priceRangeEnd){
+    priceStart = priceRangeStart
+    priceEnd = priceRangeEnd
+    let filterPriceProducts = arrProducts.filter(function(item) {
+        const value = parseInt(item.price.replace(/[ .đ]/gm,''))
+        let s = (priceRangeStart==undefined) ? 0 : priceRangeStart
+        let e = (priceRangeEnd==undefined) ? value : priceRangeEnd
+        let name = (searchValue=="") ? item.name.toLowerCase() : searchValue.toLowerCase()
+        return value >= s && value <= e && item.name.toLowerCase().includes(name)
+    })
+    start = 0;
+    end = itemPerPage;
+    totalPages = Math.ceil(filterPriceProducts.length / itemPerPage);
+    showResultSearchAndFilter()
+    renderPagesList(totalPages);
+    renderProduct(filterPriceProducts, start, end);
+    changePage(filterPriceProducts);
+    productDetailNaviagte();
 }
 
-// filterByPrice(products);
+function filterByPrice(arrProducts, options) {
+    const priceOptions = document.querySelectorAll(options);
+    priceOptions[0].onclick = function() {filter(arrProducts)}
+    priceOptions[1].onclick = function() {filter(arrProducts, 0, 10000000)}
+    priceOptions[2].onclick = function() {filter(arrProducts, 10000000, 20000000)}
+    priceOptions[3].onclick = function() {filter(arrProducts, 20000000, 30000000)}
+    priceOptions[4].onclick = function() {filter(arrProducts, 30000000)}
+}
 
 
 // ================================================================================== //
@@ -2129,95 +2144,38 @@ signUpForm.onsubmit = function(e) {
     
 }
 
-// logInFrom.onsubmit = function(e) {
-//     e.preventDefault()
-//     const pass = username_pass.value
-//     let acc = userAccounts.find(function(item) {
-//         return (item.username === username_login.value && item.password === pass);
-//     });
-//     if(acc.type == 1) {   // admin 
-//         accountState = acc.username;
-//         localStorage.setItem("accountState", JSON.stringify(accountState));
-//         desc.innerHTML = "Đăng nhập thành công!";
-//         desc.style.color = "#1dbfaf";
-//         setTimeout(() => {
-//             signUpModal.classList.add("signUp_modal-hide");
-//         }, 1000);
-//         renderAccountOnPC(acc);
-//         renderAccountOnMobile(acc);
-//     }
-//     else if(acc.type == 0) {   //  user
-//         accountState = acc.username;
-//         localStorage.setItem("accountState", JSON.stringify(accountState));
-//         desc.innerHTML = "Đăng nhập thành công!";
-//         desc.style.color = "#1dbfaf";
-//         setTimeout(() => {
-//             signUpModal.classList.add("signUp_modal-hide");
-//         }, 1000);
-//         renderAccountOnPC(acc);
-//         renderAccountOnMobile(acc);
-//     }
-//     else {
-//         desc.innerHTML = "Tài khoản hoặc mật khẩu sai, Đăng ký mới?";
-//         desc.style.color = "red";
-//     }
-// }
-
 logInFrom.onsubmit = function(e) {
     e.preventDefault()
     const pass = username_pass.value
     let acc = userAccounts.find(function(item) {
         return (item.username === username_login.value && item.password === pass);
     });
-    if(username_login.value == false && pass==false)
-    {
-        desc.innerHTML = "Mời nhập tài khoản và mật khẩu";
-        desc.style.color = "red";
+    if(!acc){
+        desc.innerHTML = "Tài khoản hoặc mật khẩu sai, Đăng ký mới?"
+        desc.style.color = "red"
+        return
     }
-    else{
-        if (pass==false) {
-            desc.innerHTML = "Mời nhập mật khẩu";
-            desc.style.color = "red";
-            username_pass.classList.add("form-input-active");
-        }
-        else{
-            if(username_login.value==false)
-            {
-                desc.innerHTML = "Mời nhập tài khoản";
-                desc.style.color= "red";
-                username_login.classList.add("form-input-active");
-            }
-            else{ 
-                if(acc!=null){
-                    if(acc.type == 1) {   // admin 
-                        accountState = acc.username;
-                        localStorage.setItem("accountState", JSON.stringify(accountState));
-                        desc.innerHTML = "Đăng nhập thành công!";
-                        desc.style.color = "#1dbfaf";
-                        setTimeout(() => {
-                            signUpModal.classList.add("signUp_modal-hide");
-                        }, 1000);
-                        renderAccountOnPC(acc);
-                        renderAccountOnMobile(acc);
-                    }
-                    else if(acc.type == 0) {   //  user
-                        accountState = acc.username;
-                        localStorage.setItem("accountState", JSON.stringify(accountState));
-                        desc.innerHTML = "Đăng nhập thành công!";
-                        desc.style.color = "#1dbfaf";
-                        setTimeout(() => {
-                            signUpModal.classList.add("signUp_modal-hide");
-                        }, 1000);
-                        renderAccountOnPC(acc);
-                        renderAccountOnMobile(acc);
-                    }
-                }
-                else {
-                    desc.innerHTML = "Tài khoản hoặc mật khẩu sai, Đăng ký mới?";
-                    desc.style.color = "red";
-                }
-            }
-        }
+    if(acc.type == 1) {   // admin 
+        accountState = acc.username;
+        localStorage.setItem("accountState", JSON.stringify(accountState));
+        desc.innerHTML = "Đăng nhập thành công!";
+        desc.style.color = "#1dbfaf";
+        setTimeout(() => {
+            signUpModal.classList.add("signUp_modal-hide");
+        }, 1000);
+        renderAccountOnPC(acc);
+        renderAccountOnMobile(acc);
+    }
+    else if(acc.type == 0) {   //  user
+        accountState = acc.username;
+        localStorage.setItem("accountState", JSON.stringify(accountState));
+        desc.innerHTML = "Đăng nhập thành công!";
+        desc.style.color = "#1dbfaf";
+        setTimeout(() => {
+            signUpModal.classList.add("signUp_modal-hide");
+        }, 1000);
+        renderAccountOnPC(acc);
+        renderAccountOnMobile(acc);
     }
 }
 
@@ -2345,14 +2303,15 @@ confirmBuyForm.onsubmit = function(e) {
     let check1 = checkPhoneInput();
     let check2 = checkAddressInput();
     if(check1 && check2) {
+        const d = new Date()
         let orderNote = {
-            orderNoteID: orderNoteList.length,
-            status: "Chưa xử lý",
+            orderNoteID: d.getFullYear()+""+(d.getMonth()+1)+""+d.getDate()+""+d.getHours()+""+d.getMinutes()+""+d.getSeconds(),
+            status: 0,
             userID: accountState,
             customerName: customername.value,
             phoneNumber: phoneNum.value,
             address: address.value,
-            date: new Date().toLocaleString(),
+            date: d,
             buyItems: cart_products,
             totalPrice: cart_products.reduce((preVal, item) => {
                 return item.totalPrice + preVal
@@ -2427,13 +2386,10 @@ function checkAddressInput() {
 
 function productDetailNaviagte() {
     const productDetailBtns = document.querySelectorAll(".product_item-detailBtn");
-    // console.log(productDetailBtns)
     productDetailBtns.forEach(function(item) {
         item.onclick = function() {
-            // console.log("clicked")
             localStorage.setItem("products", JSON.stringify(products));
-            const productItem = getParentElement(item, ".product_items");
-            const productID = productItem.getAttribute("data-id");
+            const productID = getParentElement(item, ".product_items").getAttribute("data-id");
             window.location.href = `./product_details/product_details.html?product_id=${productID}`;
         }
     })
@@ -2468,9 +2424,6 @@ function renderOrderNoteList() {
     }
     else {
         bodyContent.innerHTML = ""
-        // const orderNote = orderNoteList.filter((item) => {
-        //     return item.userID === accountState 
-        // })
         orderNote.forEach((item) => {
             const orderDivOverview = document.createElement("div")
             const orderDivDetail = document.createElement("div")
@@ -2482,10 +2435,10 @@ function renderOrderNoteList() {
                     <div class="orderNote_id">Mã đơn hàng: ${item.orderNoteID}</div>
                     <div class="orderNote_totalPrice">Thành tiền: <span style="color: red;">${item.totalPrice} đ</span></div>
                 </div>
-                <div class="orderNote_date">Ngày tạo: ${item.date}</div>
+                <div class="orderNote_date">Ngày tạo: ${item.date.toLocaleString()}</div>
                 <div class="orderNote_statsus">
                     Tình trạng
-                    <div class="orderNote_state">${item.status}</div>
+                    <div class="orderNote_state">${item.status==0?"Chưa xử lý":"Đã xử lý"}</div>
                 </div>
                 <div class="orderNote_viewDetails">
                     <span>Xem chi tiết</span>
@@ -2496,6 +2449,7 @@ function renderOrderNoteList() {
             item.buyItems.forEach((i)=>{
                 str += `
                     <div class="orderNote_items">
+                        <div class="orderNote_productImg" style="background-image:url(${i.img})"></div>
                         <div class="orderNote_productName">${i.name}</div>
                         <div class="orderNote_productPrice">Đơn giá: <span style="color: red;">${i.price} đ</span></div>
                         <div class="orderNote_productQuantity">SL: ${i.quantity}</div>

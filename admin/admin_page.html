@@ -51,7 +51,7 @@
                         <i class="fa-solid fa-chart-pie"></i>
                         Thống kê
                     </li>
-                    <li class="sidebar_menu-items logut">
+                    <li class="sidebar_menu-items logOut">
                         <!-- icons, options here -->
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         Đăng xuất
@@ -62,10 +62,9 @@
         </div>
         <div class="main_content">
             <!-- category tab -->
-
-            <div class="tabs category_tab category tab_hide">
+            <div class="tabs category_tab category">
                 <div class="category_heading">
-                    <h3>Quản lý các danh mục</h3>
+                    <h3>QUẢN LÝ DANH MỤC</h3>
                 </div>
                 <div class="category_body">
                     <div class="category_list_header">
@@ -82,13 +81,13 @@
                     <div class="category_modal_form">
                         <div class="form-group">
                             <label for="category_id">Mã danh mục</label>
-                            <input class="form-input" type="text" id="category_id">
+                            <input class="form-input" type="text" id="category_id" readonly>
                         </div>
                         <div class="form-group">
                             <label for="category_name">Tên danh mục</label>
                             <input class="form-input" type="text" id="category_name">                        
                         </div>
-                        <span class="messege"></span>
+                        <span class="messege" style="color: red;"></span>
                         <div class="form-btns">
                             <button class="btn" id="category_confirm_btn">Xác nhận</button>
                             <button class="btn" id="category_cancel_btn">Hủy</button>
@@ -100,7 +99,18 @@
             <!-- products tab -->
             <div class="tabs product_tab product tab_hide">
                 <div class="product_tab_heading">
-                    <h3>Quản lý sản phẩm</h3>
+                    <h3>QUẢN LÝ SẢN PHẨM</h3>
+                </div>
+                <div class="product_search">
+                    <div class="product_filter">
+                        <select class="product_filter_category">
+                            <!-- <option value="">Tất cả</option> -->
+                        </select>
+                    </div>
+                    <div class="product_searchbar">
+                        <input type="text" id="product_search_input">
+                        <button class="btn" id="product_search_btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
                 </div>
                 <div class="product_tab_body">
                     <div class="product_list_header">
@@ -157,17 +167,19 @@
                     </div>
                 </div>
             </div>
+
             <!-- order notes tab -->
             <div class="tabs orderNote_tab ordernote tab_hide">
                 <div class="orderNoteTab_heading">
-                    <h3 class="orderNote_title">Danh sách các đơn hàng</h3>
-                    <div class="orderNote_filter">
-                        <label for="orderNote_time">Khoảng thời gian:</label>
-                        <input type="datetime-local" id="orderNote_time-from">
-                        đến
-                        <input type="datetime-local" id="orderNote_time-to">
-                        <button>Lọc</button>
-                    </div>
+                    <h3 class="orderNote_title">QUẢN LÝ ĐƠN HÀNG</h3>
+                </div>
+                <div class="orderNote_filter">
+                    <label for="orderNote_date-from">Khoảng thời gian:</label>
+                    <input type="date" id="orderNote_date-from">
+                    đến
+                    <input type="date" id="orderNote_date-to">
+                    <button id="orderNote_date-btn">Lọc</button>
+                    <button id="orderNote_all-btn">Tất cả</button>
                 </div>
                 <div class="orderNoteTab_body">
                     <div class="orderNote_list_header">
@@ -185,7 +197,7 @@
             <!-- accounts tab -->
             <div class="tabs account_tab account tab_hide">
                 <div class="account_tab_heading">
-                    <h3>Quản lý Người dùng</h3>
+                    <h3>QUẢN LÝ TÀI KHOẢN</h3>
                 </div>
                 <div class="account_tab_body">
                     <div class="account_list_header">
@@ -227,7 +239,34 @@
                     </div>
                 </div>
             </div>
+
             <!-- reports tab -->
+            <div class="tabs report_tab report tab_hide">
+                <div class="report_tab_heading">
+                    <h3>THỐNG KÊ KINH DOANH</h3>
+                </div>
+                <div class="report_filter">
+                    <label for="report_date_from">Khoảng thời gian:</label>
+                    <input type="date" id="report_date_from">
+                    đến
+                    <input type="date" id="report_date_to">
+                    <select id="report_filter_category">
+                        <!-- <option value="">Tất cả</option> -->
+                    </select>
+                    <button class="btn" id="report_filter_btn">Lọc</button>
+                    <span id="report_total_income"></span>
+                </div>
+                <div class="report_tab_body">
+                    <div class="report_list_header">
+                        <div class="report_list_items">Sản phẩm</div>
+                        <div class="report_list_items">Số lượng bán ra</div>
+                        <div class="report_list_items">Doanh thu</div>
+                    </div>
+                    <div class="report_list">
+                        <!-- js render -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
