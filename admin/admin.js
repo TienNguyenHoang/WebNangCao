@@ -80,10 +80,7 @@ function renderOrderNotes(orderNotes) {
             <div class="orderNote_list_items">${item.orderNoteID}</div>
             <div class="orderNote_list_items">${new Date(item.date).toLocaleString()}</div>
             <div class="orderNote_list_items">
-                <select class="orderNote_selection">
-                    <option value="${item.status==0? 0:1}" selected>${tt}</option>
-                    <option value="${item.status==0? 1:0}">${tt2}</option>
-                </select>
+                ${tt}
             </div>
             <div class="orderNote_list_items">${item.totalPrice} đ</div>
             <div class="orderNote_list_items orderNote_viewDetails">Chi tiết</div>
@@ -94,6 +91,11 @@ function renderOrderNotes(orderNotes) {
                     <div>Tên khách hàng: ${item.customerName}</div>
                     <div>Địa chỉ: ${item.address}</div>
                     <div>Số điện thoại: ${item.phoneNumber}</div>
+                    <label for="status_selection">Tình trạng đơn hàng</label>
+                    <select class="orderNote_selection" id="status_selection">
+                        <option value="${item.status==0? 0:1}" selected>${tt}</option>
+                        <option value="${item.status==0? 1:0}">${tt2}</option>
+                    </select>
                 </div>
             `
         item.buyItems.forEach((i) => {
@@ -134,16 +136,18 @@ function changeOrderNoteStatus() {
     orderNoteSelects.forEach((item) => {
         item.onchange = function() {
             const tt = parseInt(item.value)
-            const orderNoteoverView = getParentElement(item, ".orderNote_overView")
+            const orderNoteoverView = getParentElement(item, ".orderNote_details").previousElementSibling
             if(tt === 0) {
                 orderNoteoverView.classList.remove("background_blue")
                 orderNoteoverView.classList.add("background_red")
+                orderNoteoverView.children[2].innerText="Chưa xử lý"
             }
             else {
                 orderNoteoverView.classList.remove("background_red")
                 orderNoteoverView.classList.add("background_blue")
+                orderNoteoverView.children[2].innerText="Đã xử lý"
             }
-            const index = orderNoteList.findIndex((i) => {return i.orderNoteID == getParentElement(item, ".orderNote_overView").getAttribute("data-id")})
+            const index = orderNoteList.findIndex((i) => {return i.orderNoteID == orderNoteoverView.getAttribute("data-id")})
             if(index !== -1) orderNoteList[index].status = tt
             localStorage.setItem("orderNoteList", JSON.stringify(orderNoteList))
             const arrThongKe = tinhHinhKinhDoanhSanPham()
@@ -414,12 +418,8 @@ productModalForm.onsubmit = (e) => {
     // check required input fields
     // add to products arr in first index(for render)
     let img=""
-    let regex=/[!@#$%^&*(),.?":{}|<>]/gm
+    let regex=/[!@#$%^&*,.?":{}|<>]/gm
     e.preventDefault()
-    if(products.some((item)=>{return item.name == productName.value})) {
-        alert("Tên sản phẩm không được trùng (đã tồn tại)")
-        return
-    }
     if(regex.test(productName.value)){
         alert("Tên sản phẩm không chứa ký tự đặc biệt!")
         return
@@ -454,6 +454,10 @@ productModalForm.onsubmit = (e) => {
     }
     switch (product_form_action) {
         case "add":
+            if(products.some((item)=>{return item.name == productName.value})) {
+                alert("Tên sản phẩm không được trùng (đã tồn tại)")
+                return
+            }
             product = {
                 id : autoGenerateProductId(),
                 name : productName.value,
@@ -777,10 +781,11 @@ accountForm.onsubmit=(e)=>{
 // ----------- THỐNG KÊ BÁO BÁO ---------- //
 // ======================================= //
 
-
 // ---------- tính tổng doanh thu ----------- //
 function caclTotalIncome(arr){
+    let totalSaleQuantity = arr.reduce((totalVal, curVal)=>{return totalVal + (curVal.saleQuantity)},0)
     let income = arr.reduce((totalVal, currVal)=>{return totalVal + (currVal.saleQuantity*parseInt(currVal.unitPrice.replace(/[ .đ]/gm,'')))},0)
+    document.querySelector("#report_total_quantity").innerHTML = `Tổng số lượng đã bán: ${totalSaleQuantity}`
     document.querySelector("#report_total_income").innerHTML = `Tổng doanh thu: <span style="color:red;">${income} đ</span>`
 }
 

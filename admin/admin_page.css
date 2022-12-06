@@ -43,7 +43,7 @@
     margin-left: 320px;
     padding: 0 15px 15px 15px;
     background-color: var(--background-color);
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .menu_active {
@@ -122,6 +122,14 @@
     align-items: center;
     font-size: 1.5rem;
     color: var(--text-color);
+}
+
+#category_add_btn{
+    background-color: var(--theme-color);
+    color: var(--white-color);
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    margin-left: 10%;
 }
 
 #category_add_btn:hover{
@@ -226,7 +234,7 @@ label[for="category_id"], label[for="category_name"] {
 .product_search{
     height: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 40px;
 }
 
@@ -263,15 +271,11 @@ label[for="category_id"], label[for="category_name"] {
     font-size: 1.8rem;
 }
 
-.product_tab_body {
-    max-height: 79vh;
-    overflow-y: scroll;
-}
-
 .product_list_header {
     display: grid;
     grid-template-columns: 0.5fr 2fr 1fr 0.5fr 1fr;
     font-size: 2rem;
+    margin-right: 16px;
 }
 
 .product_list_header> .product_list_items{
@@ -279,6 +283,11 @@ label[for="category_id"], label[for="category_name"] {
     color: var(--white-color);
     height: 50px;
     line-height: 50px;
+}
+
+.product_list{
+    max-height: 72vh;
+    overflow-y: scroll;
 }
 
 .product_list_content {
@@ -365,6 +374,13 @@ label[for="category_id"], label[for="category_name"] {
     background-repeat: no-repeat;
 }
 
+#product_add_btn{
+    background-color: var(--theme-color);
+    color: var(--white-color);
+    font-size: 1.7rem;
+    margin-right: 170px;
+}
+
 #product_add_btn:hover {
     cursor: pointer;
     opacity: 0.7;
@@ -431,6 +447,10 @@ label[for="category_id"], label[for="category_name"] {
     color: var(--white-color);
 }
 
+.orderNote_list_header>.orderNote_list_items:last-child{
+    background-color: var(--background-color);
+}
+
 .orderNote_list_items {
     color: var(--text-color);
     height: 40px;
@@ -475,7 +495,7 @@ label[for="category_id"], label[for="category_name"] {
     background-color: var(--background-color);
 }
 
-.orderNote_customerInfo>div {
+.orderNote_customerInfo>div,  .orderNote_customerInfo>label{
     margin: 0 0 7px 10px;
     font-size: 1.6rem;
     color: var(--text-color);
@@ -560,12 +580,11 @@ label[for="category_id"], label[for="category_name"] {
 .account_list_header {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    font-size: 1.7rem;
+    font-size: 1.9rem;
 }
 
 .account_list_header>.account_list_items {
     background-color: var(--theme-color);
-    font-weight: 500;
     color: var(--white-color);
 }
 
@@ -593,6 +612,13 @@ label[for="category_id"], label[for="category_name"] {
 .accountInfo_detail>span:hover{
     cursor: pointer;
     color: var(--theme-color);
+}
+
+#account_add_btn{
+    background-color: var(--theme-color);
+    color: var(--white-color);
+    font-size: 1.6rem;
+    margin-bottom: 20px;
 }
 
 #account_add_btn:hover{
@@ -667,10 +693,13 @@ label[for="category_id"], label[for="category_name"] {
     grid-template-columns: 3fr 1fr 1fr;
     align-items: center;
     color: var(--white-color);
+    margin-right: 16px;
 }
 
 .report_list_header>.report_list_items{
     background-color: #ff422d;
+    height: 40px;
+    line-height: 40px;
 }
 
 .report_list_header>.report_list_items:nth-child(odd){
@@ -681,6 +710,11 @@ label[for="category_id"], label[for="category_name"] {
     height: 80px;
     line-height: 80px;
     text-align: center;
+}
+
+.report_list {
+    max-height: 70vh;
+    overflow-y: scroll;
 }
 
 .report_list_content{
@@ -706,10 +740,13 @@ label[for="category_id"], label[for="category_name"] {
 }
 
 .report_filter{
-    text-align: center;
     height: 50px;
-    line-height: 50px;
     font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .report_filter>.btn{
@@ -718,4 +755,9 @@ label[for="category_id"], label[for="category_name"] {
     background-color: var(--theme-color);
     height: 30px;
     margin-right: 50px;
+}
+
+.report_result {
+    display: flex;
+    flex-direction: column;
 }
