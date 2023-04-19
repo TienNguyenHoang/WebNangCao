@@ -102,6 +102,9 @@
                     <li class="sidebar_menu-items report list-group-item">
                         <i class="fa-solid fa-chart-pie"></i> Thống kê
                     </li>
+                    <li class="sidebar_menu-items permission list-group-item">
+                        <i class="fa-solid fa-chart-pie"></i> Quyền
+                    </li>
                 </div>
             </div>
             <div class="main_content col-sm-9">
@@ -219,8 +222,6 @@
                                         <tr class="product_list_header">
                                             <th class="product_list_items">Hình ảnh</th>
                                             <th class="product_list_items">Tên sản phẩm</th>
-                                            <th class="product_list_items">Đơn giá</th>
-                                            <th class="product_list_items">Tồn kho</th>
                                             <th class="product_list_items">Actions</th>
                                         </tr>
                                     </thead>
@@ -229,7 +230,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                         <!-- product_delete_modal -->
                         <div class="modal fade product_delete_modal product_modal_hide" id="product_delete_modal" role="dialog">
@@ -274,14 +274,6 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="product_name">Tên sản phẩm <span style="color: red;">(*)</span></label>
                                                 <textarea class="form-control form-input" type="text" id="product_name" required style="height: 50px;"></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="form-label" for="product_price">Đơn giá sản phẩm <span style="color: red;">(*)</span></label>
-                                                <input class="form-control form-input" type="number" id="product_price" placeholder="Định dạng: xxx.xxx.xxx" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="form-label" for="product_quantity">Tồn kho <span style="color: red;">(*)</span></label>
-                                                <input class="form-control form-input" type="number" id="product_quantity" required>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label" for="product_category_selection">Danh mục <span style="color: red;">(*)</span></label>

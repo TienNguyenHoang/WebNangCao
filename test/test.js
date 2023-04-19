@@ -432,8 +432,6 @@ function renderProducts(arrProducts) {
                     <div class="product_bgImg" style="background-image: url(.${item.background_image})"></div>
                 </td>
                 <td class="product_list_items product_name">${item.name}</td>
-                <td class="product_list_items"><span style="color:var(--theme-color)">${item.price}</span></td>
-                <td class="product_list_items">${item.quantity}</td>
                 <td class="product_list_items">
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#product_delete_modal">
                         <i class="fa-solid fa-trash product_delete_btn"></i>
@@ -459,8 +457,6 @@ const productCancelBtn = document.querySelector("#product_cancel_btn")
 const productCategory = document.querySelector("#product_category_selection")
 const productFile = document.querySelector("#product_img")
 const productName = document.querySelector("#product_name")
-const productPrice = document.querySelector("#product_price")
-const productQuantity = document.querySelector("#product_quantity")
 const productDesc = document.querySelector("#product_description")
 let product_form_action = ""
 
@@ -501,14 +497,6 @@ productModalForm.onsubmit = (e) => {
         alert("Tên sản phẩm không chứa ký tự đặc biệt!")
         return
     }
-    if (productPrice.value < 0) {
-        alert("Giá sản phẩm phải >=0")
-        return
-    }
-    if (productQuantity.value <= 0) {
-        alert("Số lượng sản phẩm không hợp lệ")
-        return
-    }
     if (productCategory.value == "0") {
         alert("Vui lòng chọn danh mục cho sản phẩm")
         return
@@ -536,8 +524,6 @@ productModalForm.onsubmit = (e) => {
             product = {
                 id: autoGenerateProductId(),
                 name: productName.value,
-                price: productPrice.value + " đ",
-                quantity: productQuantity.value,
                 background_image: img,
                 categoryID: productCategory.value,
                 description: productDesc.value,
@@ -560,8 +546,6 @@ productModalForm.onsubmit = (e) => {
         case "update":
             const index = products.findIndex((item) => { return item.id == document.querySelector("#product_id").innerText })
             products[index].name = productName.value
-            products[index].quantity = productQuantity.value
-            products[index].price = productPrice.value
             products[index].description = productDesc.value
             products[index].categoryID = productCategory.value
             if (`url(.${products[index].background_image})` != document.querySelector(".img_review").style.backgroundImage) {
@@ -602,17 +586,13 @@ function clearProductForm() {
     productFile.value = null
     document.querySelector(".img_review").removeAttribute("style")
     productName.value = ""
-    productPrice.value = null
     productCategory.value = "0"
-    productQuantity.value = null
     productDesc.value = ""
 }
 
 function renderProductForm(productId) {
     let product = products.find((item) => { return item.id == productId })
     productName.value = product.name
-    productPrice.value = parseInt(product.price.replace(/[ .đ]/gm, ''))
-    productQuantity.value = product.quantity
     productDesc.value = product.description
     productCategory.value = product.categoryID
     document.querySelector(".img_review").style.backgroundImage = `url(.${product.background_image})`

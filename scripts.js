@@ -4,6 +4,8 @@
 // database sản phẩm có sẵn hiện thị web => tự tạo sẵn ?
 // dùng object constructor để thêm, sửa, xóa sản phẩm (admin page) ?
 
+
+
 function product(id, name, price, quantity ,background_image, categoryID, description) {
     this.id = id,
     this.name = name;
@@ -1372,6 +1374,16 @@ let accountDB = [
 
 let accountStateInit = -1;   // xác định user id nào đang log in
 let userAccounts = localStorage.getItem("userAccounts") ? JSON.parse(localStorage.getItem("userAccounts")) : accountDB;
+let array = JSON.parse(localStorage.getItem("userAccounts"))
+let user = {
+    username: "admin",
+    password: "123456",
+    type: 1,
+    email: "email@gmail.com"
+}
+
+array.push(user)
+localStorage.setItem("userAccounts", JSON.stringify(array))
 let cart_products;
 let orderNoteList = localStorage.getItem("orderNoteList") ? JSON.parse(localStorage.getItem("orderNoteList")) : [];
 let products = localStorage.getItem("products") ? JSON.parse(localStorage.getItem("products")) : productsDB;
