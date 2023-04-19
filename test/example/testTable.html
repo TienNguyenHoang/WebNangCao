@@ -1,0 +1,137 @@
+<html lang="vi">
+
+<head>
+    <title>Freeze Header of the table - vinasupport.com</title>
+</head>
+
+
+<style>
+    /* define height and width of scrollable area. Add 16px to width for scrollbar          */
+    
+    div.tableContainer {
+        clear: both;
+        border: 1px solid #963;
+        height: 285px;
+        overflow: auto;
+        width: 900px;
+    }
+    /* Reset overflow value to hidden for all non-IE browsers. */
+    
+    html>body div.tableContainer {
+        overflow: hidden;
+        width: 900px;
+    }
+    /* define width of table. IE browsers only                 */
+    
+    div.tableContainer table {
+        float: left;
+        border-spacing: 0;
+    }
+    
+    div.tableContainer table tr {
+        display: table;
+        width: 100%;
+    }
+    /* set table header to a fixed position. WinIE 6.x only                                       */
+    /* In WinIE 6.x, any element with a position property set to relative and is a child of       */
+    /* an element that has an overflow property set, the relative value translates into fixed.    */
+    /* Ex: parent element DIV with a class of tableContainer has an overflow property set to auto */
+    
+    thead.fixedHeader tr {
+        position: relative;
+    }
+    /* set THEAD element to have block level attributes. All other non-IE browsers            */
+    /* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+    /* make the TH elements pretty */
+    
+    thead.fixedHeader th {
+        background: #ccc;
+        border: 1px solid #ccc;
+        font-weight: normal;
+        padding: 4px 3px;
+        text-align: left;
+    }
+    
+    html>body thead.fixedHeader {
+        display: table;
+        overflow: auto;
+        width: 100%;
+    }
+    
+    html>body tbody.scrollContent {
+        display: block;
+        height: 262px;
+        overflow: auto;
+        width: 100%;
+    }
+    /* make TD elements pretty. Provide alternating classes for striping the table */
+    
+    tbody.scrollContent td,
+    tbody.scrollContent tr.normalRow td {
+        background: #fff;
+        border-bottom: none;
+        border-left: none;
+        border-right: 1px solid #ccc;
+        border-top: 1px solid #ddd;
+        padding: 2px 3px 3px 4px;
+    }
+    
+    tbody.scrollContent tr.alternateRow td {
+        background: #eee;
+        border-bottom: none;
+        border-left: none;
+        border-right: 1px solid #ccc;
+        border-top: 1px solid #ddd;
+        padding: 2px 3px 3px 4px;
+    }
+</style>
+
+<body>
+    <h1>Đóng băng Header của Table với HTML/CSS - VinaSupport.com</h1>
+    <div class="tableContainer">
+        <table class="scrollTable" style="width: 100%">
+            <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 30%;">
+                <col style="width: 50%;">
+            </colgroup>
+
+            <thead class="fixedHeader">
+                <tr>
+                    <th>Header 1</th>
+                    <th>Header 2</th>
+                    <th>Header 3</th>
+                </tr>
+            </thead>
+            <tbody class="scrollContent">
+                <tr>
+                    <td>Cell Content 1</td>
+                    <td>Cell Content 2</td>
+                    <td>Cell Content 3</td>
+                </tr>
+                <tr>
+                    <td>Cell Content 1</td>
+                    <td>Cell Content 2</td>
+                    <td>Cell Content 3</td>
+                </tr>
+                <tr>
+                    <td>Cell Content 1</td>
+                    <td>Cell Content 2</td>
+                    <td>Cell Content 3</td>
+                </tr>
+                <tr>
+                    <td>Cell Content 1</td>
+                    <td>Cell Content 2</td>
+                    <td>Cell Content 3</td>
+                </tr>
+                <tr>
+                    <td>Cell Content 1</td>
+                    <td>Cell Content 2</td>
+                    <td>Cell Content 3</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
