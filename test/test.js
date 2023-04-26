@@ -288,35 +288,38 @@ categorySubmitBtn.onclick = (e) => {
                 localStorage.setItem("categories", JSON.stringify(categories))
                 document.querySelector(".messege").innerText = ""
                     // alert
-                setTimeout(() => {
-                    categoryModal.classList.add("category_modal_hide")
-                    document.getElementById("category_modal").classList.remove("in")
-                    document.querySelector(".modal-backdrop").classList.remove("in")
-                    document.querySelector(".notification_cate").innerHTML = `
+                categoryModal.classList.add("category_modal_hide")
+                document.getElementById("category_modal").classList.remove("in")
+                document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector(".notification_cate").innerHTML = `
                     <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <strong>Thành công!</strong> Bạn đã thêm thành công danh mục ${categoryName}
                     </div>
                     `
-                }, 500);
-
+                document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                setTimeout(() => {
+                    document.getElementById("category_modal").style.display = "none"
+                }, 1000);
                 break;
             case "update":
                 const index = categories.findIndex((item) => { return item.categoryID == categoryId })
                 categories[index].categoryName = categoryName
                 localStorage.setItem("categories", JSON.stringify(categories))
                 document.querySelector(".messege").innerText = ""
-                setTimeout(() => {
-                    categoryModal.classList.add("category_modal_hide")
-                    document.getElementById("category_modal").classList.remove("in")
-                    document.querySelector(".modal-backdrop").classList.remove("in")
-                    document.querySelector(".notification_cate").innerHTML += `
+                categoryModal.classList.add("category_modal_hide")
+                document.getElementById("category_modal").classList.remove("in")
+                document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector(".notification_cate").innerHTML = `
                     <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <strong>Thành công!</strong> Bạn đã sửa thành công danh mục mới là ${categoryName}
                     </div>
                     `
-                }, 500);
+                document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                setTimeout(() => {
+                    document.getElementById("category_modal").style.display = "none"
+                }, 1000);
                 break;
             default:
                 flag = false
@@ -352,7 +355,7 @@ function deleteCategory() {
                     const deletedCate = categories.splice(index, 1)
                     localStorage.setItem("categories", JSON.stringify(categories))
                     if (deletedCate != null) {
-                        document.querySelector(".notification_cate").innerHTML += `
+                        document.querySelector(".notification_cate").innerHTML = `
                         <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <strong>Thành công!</strong> Bạn đã xóa thành công danh mục ${categoryName}
@@ -361,12 +364,16 @@ function deleteCategory() {
                     }
                     document.getElementById("category_delete_modal").classList.remove("in")
                     document.querySelector(".modal-backdrop").classList.remove("in")
+                    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                    setTimeout(() => {
+                        document.getElementById("category_delete_modal").style.display = "none"
+                    }, 1000);
                     renderCategories()
                     renderProductCategory(productCategory)
                     renderProductCategory(productFilterSelection)
                 } else {
                     // alert("Không thể xóa một danh mục vẫn tồn tại sản phẩm hiện hành!")
-                    document.querySelector(".notification_cate").innerHTML += `
+                    document.querySelector(".notification_cate").innerHTML = `
                     <div class="alert alert-danger alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <strong>Thất bại!</strong> Không thể xóa danh mục ${categoryName} vì còn sản phẩm tồn tại
@@ -375,6 +382,10 @@ function deleteCategory() {
                 }
                 document.getElementById("category_modal").classList.remove("in")
                 document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                setTimeout(() => {
+                    document.getElementById("category_modal").style.display = "none"
+                }, 1000);
             }
         }
     })
@@ -533,16 +544,14 @@ productModalForm.onsubmit = (e) => {
             localStorage.setItem("products", JSON.stringify(products))
             renderProducts(products)
 
-            setTimeout(() => {
-                productModal.classList.add("product_modal_hide")
-                clearProductForm();
-                document.querySelector(".notification_product").innerHTML = `
+            productModal.classList.add("product_modal_hide")
+            clearProductForm();
+            document.querySelector(".notification_product").innerHTML = `
                 <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <strong>Thành công!</strong> Bạn đã thêm thành công sản phẩm mới
                 </div>
                 `
-            }, 1000);
             break;
         case "update":
             const index = products.findIndex((item) => { return item.id == document.querySelector("#product_id").innerText })
@@ -555,22 +564,24 @@ productModalForm.onsubmit = (e) => {
             }
             localStorage.setItem("products", JSON.stringify(products))
             renderProducts(products)
-            setTimeout(() => {
-                productModal.classList.add("product_modal_hide")
-                clearProductForm();
-                document.querySelector(".notification_product").innerHTML = `
+            productModal.classList.add("product_modal_hide")
+            clearProductForm();
+            document.querySelector(".notification_product").innerHTML = `
                 <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <strong>Thành công!</strong> Bạn đã cập nhật thành công sản phẩm
                 </div>
                 `
-            }, 1000);
             break;
         default:
             break;
     }
     document.getElementById("product_modal").classList.remove("in")
     document.querySelector(".modal-backdrop").classList.remove("in")
+    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+    setTimeout(() => {
+        document.getElementById("product_modal").style.display = "none"
+    }, 1000);
 }
 
 function renderProductCategory(element) {
@@ -661,6 +672,10 @@ function deleteProduct() {
                 }
                 document.getElementById("product_delete_modal").classList.remove("in")
                 document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                setTimeout(() => {
+                    document.getElementById("product_delete_modal").style.display = "none"
+                }, 1000);
             }
         }
     })
@@ -745,7 +760,11 @@ function renderAccount() {
             <tr class="account_list_content" data-id="${item.username}">
                 <td class="account_list_items">${item.username}</td>
                 <td class="account_list_items">${item.type == 1 ? "Quản trị":"Khách hàng"}</td>
-                <td class="account_list_items accountInfo_detail"><span>Xem chi tiết</span></td>
+                <td class="account_list_items accountInfo_detail">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#account_detail_modal">
+                    Xem chi tiết
+                </button>
+                </td>
                 <td class="account_list_items">
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#account_delete_modal">
                         <i class="fa-solid fa-trash account_delete_btn"></i>
@@ -775,7 +794,7 @@ function deleteAccount() {
                 renderAccount()
                 if (deletedAccount != null) {
                     document.querySelector(".notification_account").innerHTML = `
-                    <div class="alert alert-danger alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                    <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <strong>Thành công!</strong> Đã xóa tài khoản
                     </div>
@@ -790,6 +809,10 @@ function deleteAccount() {
                 }
                 document.getElementById("account_delete_modal").classList.remove("in")
                 document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                setTimeout(() => {
+                    document.getElementById("account_delete_modal").style.display = "none"
+                }, 1000);
             }
 
         }
@@ -903,6 +926,10 @@ accountForm.onsubmit = (e) => {
     }
     document.getElementById("account_modal").classList.remove("in")
     document.querySelector(".modal-backdrop").classList.remove("in")
+    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+    setTimeout(() => {
+        document.getElementById("account_modal").style.display = "none"
+    }, 1000);
 }
 
 // ======================================= //
@@ -1037,6 +1064,11 @@ logOutBtn.onclick = () => {
     window.location.href = "../index.html"
 }
 
+
+
+
+
+
 // ============================================ //
 // ---------------- ATTRIBUTE ----------------- //
 // ============================================ //
@@ -1125,7 +1157,7 @@ attributeSubmitBtn.onclick = (e) => {
                 attr.unshift(attributeItem)
                 localStorage.setItem("attribute", JSON.stringify(attr))
                 document.querySelector(".messege").innerText = ""
-                
+
                 attributeModal.classList.add("attribute_modal_hide")
                 document.querySelector(".notification_attribute").innerHTML = `
                 <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
@@ -1136,12 +1168,12 @@ attributeSubmitBtn.onclick = (e) => {
                 document.getElementById("attribute_modal").classList.remove("in")
                 document.querySelector(".modal-backdrop").classList.remove("in")
                 document.querySelector("body").removeChild(document.querySelector(".modal-backdrop"))
-                setTimeout(() => {document.getElementById("attribute_modal").style.display = 'none'},1000)
+                setTimeout(() => { document.getElementById("attribute_modal").style.display = 'none' }, 1000)
                 break;
             case "update":
                 const index = attr.findIndex((item) => { return item.AttributeID == attributeId })
-                attr[index].AttributeName =attributeName
-                attr[index].AttributeValue =attributeValue
+                attr[index].AttributeName = attributeName
+                attr[index].AttributeValue = attributeValue
                 localStorage.setItem("attribute", JSON.stringify(attr))
                 document.querySelector(".messege").innerText = ""
                 document.querySelector(".notification_attribute").innerHTML = `
@@ -1153,7 +1185,7 @@ attributeSubmitBtn.onclick = (e) => {
                 document.getElementById("attribute_modal").classList.remove("in")
                 document.querySelector(".modal-backdrop").classList.remove("in")
                 document.querySelector("body").removeChild(document.querySelector(".modal-backdrop"))
-                setTimeout(() => {document.getElementById("attribute_modal").style.display = 'none'},1000)
+                setTimeout(() => { document.getElementById("attribute_modal").style.display = 'none' }, 1000)
                 break;
             default:
                 flag = false
@@ -1194,6 +1226,10 @@ function deleteAttribute() {
                     }
                     document.getElementById("attribute_delete_modal").classList.remove("in")
                     document.querySelector(".modal-backdrop").classList.remove("in")
+                    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                    setTimeout(() => {
+                        document.getElementById("attribute_delete_modal").style.display = "none"
+                    }, 1000);
                     renderattribute()
                     renderProductAttribute(productAttribute)
                     renderProductAttribute(productFilterSelection)
@@ -1207,6 +1243,10 @@ function deleteAttribute() {
                 }
                 document.getElementById("attribute_modal").classList.remove("in")
                 document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+                setTimeout(() => {
+                    document.getElementById("attribute_modal").style.display = "none"
+                }, 1000);
             }
         }
     })
@@ -1215,14 +1255,14 @@ function deleteAttribute() {
 // --------------- update thuộc tính --------------- //
 function updateAttribute() {
     const attributeUpdateBtns = document.querySelectorAll(".attribute_update_btn")
-   attributeUpdateBtns.forEach((item) => {
+    attributeUpdateBtns.forEach((item) => {
         item.onclick = () => {
             document.querySelector('.messege').innerHTML = ""
             document.querySelector('.modal-title-attribute').innerHTML = "Sửa thuộc tính"
             attribute_form_action = "update"
             const attributeId = getParentElement(item, ".attribute_list_content").getAttribute("data-attributeID")
             attributeModal.classList.remove("attribute_modal_hide")
-            document.querySelector("#attributeId").value =attributeId
+            document.querySelector("#attributeId").value = attributeId
             renderAttributeForm(attributeId)
         }
     })
@@ -1232,4 +1272,238 @@ function renderAttributeForm(attributeId) {
     const attribute = attr.find((item) => { return item.attributeID == attributeId })
     document.querySelector("#attributeName").value = attribute.attributeName
     document.querySelector("#attributeValue").value = attribute.attributeValue
+}
+
+
+
+
+// ======================================= //
+// ------- Biến thể ----------- //
+// ======================================= //
+function attribute(id, name) {
+    this.id = id;
+    this.name = name;
+}
+
+function attributeValue(id, name, attribute_id) {
+    this.id = id;
+    this.name = name;
+    this.attribute_id = attribute_id;
+}
+var AttributeArray = [
+    new attribute('1', 'cpu '),
+    new attribute('2', 'ram '),
+    new attribute('3', 'ssd '),
+    new attribute('4', 'vga '),
+]
+var AttributeValueArray = [
+    new attributeValue(1, 'Intel core i5', 1),
+    new attributeValue(2, 'Amd ryzen 5', 1),
+    new attributeValue(3, '8G', 2),
+    new attributeValue(4, '4G', 2),
+    new attributeValue(5, '256GB', 3),
+    new attributeValue(6, '512GB', 3),
+    new attributeValue(7, 'GTX1650', 4),
+    new attributeValue(8, 'RTX3050', 4),
+    new attributeValue(9, 'Amd Ryzen 7', 1),
+    new attributeValue(10, 'RTX3060', 4),
+    new attributeValue(11, '16G', 2)
+]
+localStorage.setItem("AttributeArray", JSON.stringify(AttributeArray))
+localStorage.setItem("AttributeValueArray", JSON.stringify(AttributeValueArray))
+const attributes = document.getElementById('attribute_name');
+var variant_action = "";
+
+function renderAttribute(arr) {
+    var str = "";
+    arr.forEach(element => {
+        str += `<option value="${element.id}">${element.name}</option>`;
+    });
+    attributes.innerHTML = str;
+}
+
+function renderAttributeValue(arr) {
+    const attributeValue = document.getElementById('attribute_value');
+    const selectedAttribute = document.getElementById('attribute_name').value;
+    str = "";
+    arr.forEach(element => {
+        if (element.attribute_id == selectedAttribute) {
+            str += `<option value="${element.id}" >${element.name} </option>`;
+        }
+    });
+    attributeValue.innerHTML = str;
+}
+
+function clearFormVariant() {
+    document.getElementById('variant_id').value = ""
+    document.getElementById('variant_name').value = ""
+    document.getElementById('variant_price').value = ""
+    document.getElementById('variant_quantity').value = ""
+    document.getElementById('variant_id_sp').value = ""
+    document.querySelector('.variantDetail_list').innerHTML = ""
+    document.querySelector('.variant_messege').innerHTML = "";
+    document.querySelector('.variantDetail_messege').innerHTML = "";
+}
+document.getElementById('variant_add_btn').onclick = () => {
+    variant_action = "add"
+    clearFormVariant();
+    document.querySelector('.modal-title-variant').innerHTML = "Thêm biến thể"
+    var AttributeArray = localStorage.getItem("AttributeArray") ? JSON.parse(localStorage.getItem("AttributeArray")) : [];
+    var AttributeValueArray = localStorage.getItem("AttributeValueArray") ? JSON.parse(localStorage.getItem("AttributeValueArray")) : [];
+    renderAttribute(AttributeArray);
+    renderAttributeValue(AttributeValueArray);
+    attributes.addEventListener('change', function() {
+        renderAttributeValue(AttributeValueArray);
+    });
+}
+
+function isExistAttribute(attributeOption) {
+    var flag = true;
+    document.querySelectorAll('.variantDetail_item').forEach(element => {
+        if (element.firstElementChild.innerHTML === attributeOption) {
+            flag = false;
+        }
+    });
+    return flag;
+}
+
+
+document.getElementById('addAttribute').onclick = () => {
+    const selectedAttribute = document.getElementById('attribute_name');
+    const attributeOption = selectedAttribute.selectedOptions[0];
+    const selectedValue = document.getElementById('attribute_value');
+    const valueOption = selectedValue.selectedOptions[0];
+    if (isExistAttribute(attributeOption.textContent)) {
+        var str = `
+        <tr class="variantDetail_item">
+            <td class="variantDetail_attribute">${attributeOption.textContent}</td>
+            <td class="variantDetail_value ">${valueOption.textContent}</td>
+            <td class="variantDetail_delete "><i class="fa-solid fa-trash product_delete_btn"></i></td>
+        </tr>`;
+        document.querySelector('.variantDetail_list').innerHTML += str;
+        document.querySelector('.variantDetail_messege').innerHTML = "";
+    } else {
+        var str = `${attributeOption.textContent} đã tồn tại`;
+        document.querySelector('.variantDetail_messege').innerHTML = str;
+    }
+
+    const variantDetail_delete = document.querySelectorAll('.variantDetail_delete');
+    variantDetail_delete.forEach(element => {
+        element.onclick = () => {
+            document.querySelector('.variantDetail_list').removeChild(element.parentElement);
+        }
+    })
+}
+
+document.querySelector('.variant_form_submit').onsubmit = (e) => {
+    e.preventDefault();
+    switch (variant_action) {
+        case 'add':
+            document.querySelector(".notification_variant").innerHTML = `
+            <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Thành công!</strong> Đã thêm một biến thể mới!
+            </div>
+            `
+            break;
+        case 'update':
+            document.querySelector(".notification_variant").innerHTML = `
+            <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Thành công!</strong> Đã sửa thành công!
+            </div>
+            `
+            break;
+    }
+    document.getElementById("variant_modal").classList.remove("in")
+    document.querySelector('.modal-backdrop').classList.remove("in")
+    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+    setTimeout(() => {
+        document.getElementById("variant_modal").style.display = "none"
+    }, 1000);
+}
+
+const fixVariantBtns = document.querySelectorAll('.variant_update_btn');
+fixVariantBtns.forEach(fixVariantBtn => {
+    fixVariantBtn.onclick = () => {
+        variant_action = "update"
+        clearFormVariant();
+        var AttributeArray = localStorage.getItem("AttributeArray") ? JSON.parse(localStorage.getItem("AttributeArray")) : [];
+        var AttributeValueArray = localStorage.getItem("AttributeValueArray") ? JSON.parse(localStorage.getItem("AttributeValueArray")) : [];
+        renderAttribute(AttributeArray);
+        renderAttributeValue(AttributeValueArray);
+        attributes.addEventListener('change', function() {
+            renderAttributeValue(AttributeValueArray);
+        });
+        document.querySelector('.modal-title-variant').innerHTML = "Sửa biến thể";
+        document.getElementById('variant_id').value = "1"
+        document.getElementById('variant_name').value = "S092K1"
+        document.getElementById('variant_price').value = "1000000"
+        document.getElementById('variant_quantity').value = "200"
+        document.getElementById('variant_id_sp').value = "3"
+        document.querySelector('.variantDetail_list').innerHTML = `
+        <tr class="variantDetail_item">
+            <td class="variantDetail_attribute">cpu</td>
+            <td class="variantDetail_value ">Intel</td>
+            <td class="variantDetail_delete "><i class="fa-solid fa-trash product_delete_btn"></i></td>
+        </tr>
+        <tr class="variantDetail_item">
+            <td class="variantDetail_attribute">ram</td>
+            <td class="variantDetail_value ">8GB</td>
+            <td class="variantDetail_delete "><i class="fa-solid fa-trash product_delete_btn"></i></td>
+        </tr>
+        `
+    }
+})
+
+document.getElementById('variant_delete_confirm_btn').onclick = () => {
+    document.querySelector(".notification_variant").innerHTML = `
+    <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Thành công!</strong> Đã xóa thành công!
+    </div>
+    `
+    document.getElementById("variant_delete_modal").classList.remove("in")
+    document.querySelector('.modal-backdrop').classList.remove("in")
+    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+    setTimeout(() => {
+        document.getElementById("variant_delete_modal").style.display = "none"
+    }, 1000);
+}
+
+
+// ======================================= //
+// ------- nhóm quyền ----------- //
+// ======================================= //
+
+document.getElementById("permission_confirm_btn").onclick = (e) => {
+    e.preventDefault();
+    document.querySelector(".notification_permission").innerHTML = `
+    <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Thành công!</strong> Đã thêm thành công một nhóm quyền mới!
+    </div>
+    `
+    document.getElementById("permission_modal").classList.remove("in")
+    document.querySelector('.modal-backdrop').classList.remove("in")
+    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+    setTimeout(() => {
+        document.getElementById("permission_modal").style.display = "none"
+    }, 1000);
+}
+
+document.getElementById("permission_delete_confirm_btn").onclick = (e) => {
+    e.preventDefault();
+    document.querySelector(".notification_permission").innerHTML = `
+    <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Thành công!</strong> Đã xóa thành công!
+    </div>
+    `
+    document.getElementById("permission_delete_modal").classList.remove("in")
+    document.querySelector('.modal-backdrop').classList.remove("in")
+    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+    setTimeout(() => {
+        document.getElementById("permission_delete_modal").style.display = "none"
+    }, 1000);
 }
