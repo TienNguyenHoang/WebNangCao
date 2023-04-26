@@ -1475,7 +1475,9 @@ document.getElementById('variant_delete_confirm_btn').onclick = () => {
 // ======================================= //
 // ------- nhóm quyền ----------- //
 // ======================================= //
-
+document.querySelector('.permission_update_btn').onclick = () => {
+    document.querySelector('.modal-title-permission').innerHTML = "Sửa nhóm quyền"
+}
 document.getElementById("permission_confirm_btn").onclick = (e) => {
     e.preventDefault();
     document.querySelector(".notification_permission").innerHTML = `
