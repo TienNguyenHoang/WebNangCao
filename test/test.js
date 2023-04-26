@@ -1041,13 +1041,13 @@ logOutBtn.onclick = () => {
 // ---------------- ATTRIBUTE ----------------- //
 // ============================================ //
 
-let attributes = localStorage.getItem("attribute") ? JSON.parse(localStorage.getItem("attribute")) : [];
+let attr = localStorage.getItem("attribute") ? JSON.parse(localStorage.getItem("attribute")) : [];
 
 function renderAttributes() {
     const attributeList = document.querySelector(".attribute_list")
     attributeList.innerHTML = ""
     let str = ""
-    attributes.forEach((item) => {
+    attr.forEach((item) => {
         str += `
             <tr class="attribute_list_content" data-attributeID="${item.attributeID}">
                 <td class="attribute_list_items">${item.attributeID}</td>
@@ -1080,9 +1080,9 @@ attributeAddBtn.onclick = () => {
     attribute_form_action = "add"
     document.querySelector('.modal-title-attribute').innerHTML = "Thêm thuộc tính";
     attributeModal.classList.remove("attribute_modal_hide")
-    document.querySelector("#attribute_id").value = ""
-    document.querySelector("#attribute_name").value = ""
-    document.querySelector("#attribute_value").value = ""
+    document.querySelector("#attributeId").value = ""
+    document.querySelector("#attributeName").value = ""
+    document.querySelector("#attributeValue").value = ""
     document.querySelector(".message").innerText = ""
 }
 
@@ -1095,9 +1095,9 @@ attributeCancelBtn.onclick = () => {
 
 attributeSubmitBtn.onclick = (e) => {
     e.preventDefault()
-    let attributeId = document.querySelector("#attribute_id").value
-    let attributeName = document.querySelector("#attribute_name").value
-    let attributeValue = document.querySelector("#attribute_value").value
+    let attributeId = document.querySelector("#attributeId").value
+    let attributeName = document.querySelector("#attributeName").value
+    let attributeValue = document.querySelector("#attributeValue").value
     let flag = true
     if (attributeId === "") {
         document.querySelector(".message").innerText = "ID thuộc tính không được để trống"
@@ -1111,7 +1111,7 @@ attributeSubmitBtn.onclick = (e) => {
         document.querySelector(".message").innerText = "Giá trị thuộc tính không được để trống"
         return
     }
-    if (attributes.some((item) => { return item.attributeName == attributeName })) {
+    if (attr.some((item) => { return item.attributeName == attributeName })) {
         document.querySelector(".messege").innerText = "Tên thuộc tính bị trùng"
         return
     } else {
@@ -1122,8 +1122,8 @@ attributeSubmitBtn.onclick = (e) => {
                     attributeName: attributeName,
                     attributeValue: attributeValue
                 }
-                attributes.unshift(attributeItem)
-                localStorage.setItem("attribute", JSON.stringify(attributes))
+                attr.unshift(attributeItem)
+                localStorage.setItem("attribute", JSON.stringify(attr))
                 document.querySelector(".messege").innerText = ""
                 
                 attributeModal.classList.add("attribute_modal_hide")
@@ -1139,10 +1139,10 @@ attributeSubmitBtn.onclick = (e) => {
                 setTimeout(() => {document.getElementById("attribute_modal").style.display = 'none'},1000)
                 break;
             case "update":
-                const index = attribute.findIndex((item) => { return item.AttributeID == attributeId })
-                attribute[index].AttributeName =attributeName
-                attribute[index].AttributeValue =attributeValue
-                localStorage.setItem("attribute", JSON.stringify(attributes))
+                const index = attr.findIndex((item) => { return item.AttributeID == attributeId })
+                attr[index].AttributeName =attributeName
+                attr[index].AttributeValue =attributeValue
+                localStorage.setItem("attribute", JSON.stringify(attr))
                 document.querySelector(".messege").innerText = ""
                 document.querySelector(".notification_attribute").innerHTML = `
                 <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
@@ -1181,9 +1181,9 @@ function deleteAttribute() {
             const delete_btn = document.querySelector(".attribute_confirm_delete_btn")
             delete_btn.onclick = () => {
                 if (!checkDeleteAttribute(attributeId)) {
-                    const index = attribute.findIndex((item) => { return item.attributeID == attributeId })
-                    const deletedAttr = attribute.splice(index, 1)
-                    localStorage.setItem("attribute", JSON.stringify(attributes))
+                    const index = attr.findIndex((item) => { return item.attributeID == attributeId })
+                    const deletedAttr = attr.splice(index, 1)
+                    localStorage.setItem("attribute", JSON.stringify(attr))
                     if (deletedAttr != null) {
                         document.querySelector(".notification_attribute").innerHTML += `
                         <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
@@ -1222,14 +1222,14 @@ function updateAttribute() {
             attribute_form_action = "update"
             const attributeId = getParentElement(item, ".attribute_list_content").getAttribute("data-attributeID")
             attributeModal.classList.remove("attribute_modal_hide")
-            document.querySelector("#attribute_id").value =attributeId
+            document.querySelector("#attributeId").value =attributeId
             renderAttributeForm(attributeId)
         }
     })
 }
 
 function renderAttributeForm(attributeId) {
-    const attribute = attribute.find((item) => { return item.attributeID == attributeId })
-    document.querySelector("#attribute_name").value = attribute.attributeName
-    document.querySelector("#attribute_value").value = attribute.attributeValue
+    const attribute = attr.find((item) => { return item.attributeID == attributeId })
+    document.querySelector("#attributeName").value = attribute.attributeName
+    document.querySelector("#attributeValue").value = attribute.attributeValue
 }
