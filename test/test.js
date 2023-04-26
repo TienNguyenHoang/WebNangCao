@@ -2,7 +2,7 @@ let products = localStorage.getItem("products") ? JSON.parse(localStorage.getIte
 let userAccounts = localStorage.getItem("userAccounts") ? JSON.parse(localStorage.getItem("userAccounts")) : [];
 let orderNoteList = localStorage.getItem("orderNoteList") ? JSON.parse(localStorage.getItem("orderNoteList")) : [];
 let categories = localStorage.getItem("categories") ? JSON.parse(localStorage.getItem("categories")) : [];
-let cart_products = localStorage.getItem("cart_products") ? JSON.parse(localStorage.getItem("cart_products")) : []
+let cart_products = localStorage.getItem("cart_products") ? JSON.parse(localStorage.getItem("cart_products")) : [];
 
 function getParentElement(element, parent) {
     while (element.parentElement) {
@@ -25,6 +25,7 @@ window.addEventListener('DOMContentLoaded', () => {
     renderReport(tinhHinhKinhDoanhSanPham())
     renderReportFilter()
     filterReport()
+    renderAttributes()
 });
 
 
@@ -1034,4 +1035,201 @@ logOutBtn.onclick = () => {
     accountState = -1
     localStorage.setItem("accountState", JSON.stringify(accountState))
     window.location.href = "../index.html"
+}
+
+// ============================================ //
+// ---------------- ATTRIBUTE ----------------- //
+// ============================================ //
+
+let attributes = localStorage.getItem("attribute") ? JSON.parse(localStorage.getItem("attribute")) : [];
+
+function renderAttributes() {
+    const attributeList = document.querySelector(".attribute_list")
+    attributeList.innerHTML = ""
+    let str = ""
+    attributes.forEach((item) => {
+        str += `
+            <tr class="attribute_list_content" data-attributeID="${item.attributeID}">
+                <td class="attribute_list_items">${item.attributeID}</td>
+                <td class="attribute_list_items">${item.attributeName}</td>
+                <td class="attribute_list_items">${item.attributeValue}</td>
+                <td class="attribute_list_items">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#attribute_delete_modal"><i class="fa-solid fa-trash attribute_delelte_btn"></i></button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#attribute_modal"><i class="fa-solid fa-pen-to-square attribute_update_btn"></i></button>
+                </td>
+            </tr>
+        `
+    })
+
+    attributeList.innerHTML = str;
+    deleteAttribute()
+    updateAttribute()
+}
+
+
+const attributeModal = document.querySelector(".attribute_modal")
+const attributeAddBtn = document.querySelector("#attribute_add_btn")
+const attributeCancelBtn = attributeModal.querySelector("#attribute_cancel_btn")
+const attributeSubmitBtn = attributeModal.querySelector("#attribute_confirm_btn")
+let attribute_form_action = ""
+
+
+// --------------- thêm thuộc tính ---------------- //
+
+attributeAddBtn.onclick = () => {
+    attribute_form_action = "add"
+    document.querySelector('.modal-title-attribute').innerHTML = "Thêm thuộc tính";
+    attributeModal.classList.remove("attribute_modal_hide")
+    document.querySelector("#attribute_id").value = ""
+    document.querySelector("#attribute_name").value = ""
+    document.querySelector("#attribute_value").value = ""
+    document.querySelector(".message").innerText = ""
+}
+
+attributeCancelBtn.onclick = () => {
+    attributeModal.classList.add("attribute_modal_hide")
+}
+
+
+// ------------ Submit form thuộc tính --------------- //
+
+attributeSubmitBtn.onclick = (e) => {
+    e.preventDefault()
+    let attributeId = document.querySelector("#attribute_id").value
+    let attributeName = document.querySelector("#attribute_name").value
+    let attributeValue = document.querySelector("#attribute_value").value
+    let flag = true
+    if (attributeId === "") {
+        document.querySelector(".message").innerText = "ID thuộc tính không được để trống"
+        return
+    }
+    if (attributeName === "") {
+        document.querySelector(".message").innerText = "Tên thuộc tính không được để trống"
+        return
+    }
+    if (attributeValue === "") {
+        document.querySelector(".message").innerText = "Giá trị thuộc tính không được để trống"
+        return
+    }
+    if (attributes.some((item) => { return item.attributeName == attributeName })) {
+        document.querySelector(".messege").innerText = "Tên thuộc tính bị trùng"
+        return
+    } else {
+        switch (attribute_form_action) {
+            case "add":
+                let attributeItem = {
+                    attributeID: attributeId,
+                    attributeName: attributeName,
+                    attributeValue: attributeValue
+                }
+                attributes.unshift(attributeItem)
+                localStorage.setItem("attribute", JSON.stringify(attributes))
+                document.querySelector(".messege").innerText = ""
+                
+                attributeModal.classList.add("attribute_modal_hide")
+                document.querySelector(".notification_attribute").innerHTML = `
+                <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Thành công!</strong> Bạn đã thêm thành công thuộc tính ${attributeName} với giá trị ${attributeValue}
+                </div>
+                `
+                document.getElementById("attribute_modal").classList.remove("in")
+                document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector("body").removeChild(document.querySelector(".modal-backdrop"))
+                setTimeout(() => {document.getElementById("attribute_modal").style.display = 'none'},1000)
+                break;
+            case "update":
+                const index = attribute.findIndex((item) => { return item.AttributeID == attributeId })
+                attribute[index].AttributeName =attributeName
+                attribute[index].AttributeValue =attributeValue
+                localStorage.setItem("attribute", JSON.stringify(attributes))
+                document.querySelector(".messege").innerText = ""
+                document.querySelector(".notification_attribute").innerHTML = `
+                <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Thành công!</strong> Bạn đã sửa thành công thuộc tính ${attributeName} với giá trị ${attributeValue}
+                </div>
+                `
+                document.getElementById("attribute_modal").classList.remove("in")
+                document.querySelector(".modal-backdrop").classList.remove("in")
+                document.querySelector("body").removeChild(document.querySelector(".modal-backdrop"))
+                setTimeout(() => {document.getElementById("attribute_modal").style.display = 'none'},1000)
+                break;
+            default:
+                flag = false
+                break;
+        }
+
+    }
+}
+
+// ------------- xóa thuộc tính ------------------- //
+function checkDeleteAttribute(attributeId) {
+    return products.some((item) => { return item.attributeID == attributeId })
+}
+
+function deleteAttribute() {
+    const attributeDeleteBtns = document.querySelectorAll(".attribute_delete_btn")
+    attributeDeleteBtns.forEach((item) => {
+        item.onclick = () => {
+            const attributeId = getParentElement(item, ".attribute_list_content").children[0].innerText
+            const attributeName = getParentElement(item, ".attribute_list_content").children[1].innerText
+            const attributeValue = getParentElement(item, ".attribute_list_content").children[2].innerText
+            document.querySelector(".attribute_delete_id").value = attributeId
+            document.querySelector(".attribute_delete_name").value = attributeName
+            document.querySelector(".attribute_delete_value").value = attributeValue
+            const delete_btn = document.querySelector(".attribute_confirm_delete_btn")
+            delete_btn.onclick = () => {
+                if (!checkDeleteAttribute(attributeId)) {
+                    const index = attribute.findIndex((item) => { return item.attributeID == attributeId })
+                    const deletedAttr = attribute.splice(index, 1)
+                    localStorage.setItem("attribute", JSON.stringify(attributes))
+                    if (deletedAttr != null) {
+                        document.querySelector(".notification_attribute").innerHTML += `
+                        <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>Thành công!</strong> Bạn đã xóa thành công thuộc tính ${attributeName}
+                        </div>
+                        `
+                    }
+                    document.getElementById("attribute_delete_modal").classList.remove("in")
+                    document.querySelector(".modal-backdrop").classList.remove("in")
+                    renderattribute()
+                    renderProductAttribute(productAttribute)
+                    renderProductAttribute(productFilterSelection)
+                } else {
+                    document.querySelector(".notification_attribute").innerHTML += `
+                    <div class="alert alert-danger alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Thất bại!</strong> Không thể xóa thuộc tính ${attributeName} vì còn sản phẩm tồn tại
+                    </div>
+                    `
+                }
+                document.getElementById("attribute_modal").classList.remove("in")
+                document.querySelector(".modal-backdrop").classList.remove("in")
+            }
+        }
+    })
+}
+
+// --------------- update thuộc tính --------------- //
+function updateAttribute() {
+    const attributeUpdateBtns = document.querySelectorAll(".attribute_update_btn")
+   attributeUpdateBtns.forEach((item) => {
+        item.onclick = () => {
+            document.querySelector('.messege').innerHTML = ""
+            document.querySelector('.modal-title-attribute').innerHTML = "Sửa thuộc tính"
+            attribute_form_action = "update"
+            const attributeId = getParentElement(item, ".attribute_list_content").getAttribute("data-attributeID")
+            attributeModal.classList.remove("attribute_modal_hide")
+            document.querySelector("#attribute_id").value =attributeId
+            renderAttributeForm(attributeId)
+        }
+    })
+}
+
+function renderAttributeForm(attributeId) {
+    const attribute = attribute.find((item) => { return item.attributeID == attributeId })
+    document.querySelector("#attribute_name").value = attribute.attributeName
+    document.querySelector("#attribute_value").value = attribute.attributeValue
 }

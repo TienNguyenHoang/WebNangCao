@@ -168,3 +168,45 @@
 
 
 /* ========================== */
+
+/* ========================================= */
+
+
+/* -------------- ATTRIBUTE TAB ------------- */
+
+
+/* ========================================= */
+
+.attribute_delete_btn,
+.attribute_update_btn {
+    font-size: 1.8rem;
+}
+
+.attribute_delete_btn:hover,
+.attribute_update_btn:hover {
+    cursor: pointer;
+    font-size: 2.1rem;
+    color: var(--theme-color);
+}
+
+.attribute_modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: flex;
+}
+
+.attribute_modal_form {
+    margin: auto;
+    background-color: var(--white-color);
+    width: 320px;
+    font-size: 1.8rem;
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.attribute_modal_hide {
+    display: none;
+}

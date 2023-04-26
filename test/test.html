@@ -102,8 +102,8 @@
                     <li class="sidebar_menu-items report list-group-item">
                         <i class="fa-solid fa-chart-pie"></i> Thống kê
                     </li>
-                    <li class="sidebar_menu-items permission list-group-item">
-                        <i class="fa-solid fa-chart-pie"></i> Quyền
+                    <li class="sidebar_menu-items attribute list-group-item">
+                        <i class="fa-solid fa-chart-pie"></i> Thuộc tính
                     </li>
                 </div>
             </div>
@@ -508,6 +508,98 @@
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="tabs attribute_tab attribute tab_hide">
+                    <div class="attribute_heading" style="position: relative">
+                        <h2>QUẢN LÝ THUỘC TÍNH</h2>
+                        <hr>
+                        <div class="notification_attribute"></div>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-success" id="attribute_add_btn" data-toggle="modal" data-target="#attribute_modal" style="margin-bottom: 10px;">Thêm thuộc tính</button>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Thuộc tính</div>
+                        <div class="panel-body">
+                            <table class="table table-hover">
+                                <thead class="attribute_body">
+                                    <tr class="attribute_list_header">
+                                        <th class="attribute_list_items">Mã thuộc tính</th>
+                                        <th class="attribute_list_items">Tên thuộc tính</th>
+                                        <th class="attribute_list_items">Giá trị thuộc tính</th>
+                                        <th class="attribute_list_items">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="attribute_list">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="modal fade attribute_modal attribute_modal_hide" id="attribute_modal" role="dialog">
+                        <div class="modal-dialog attribute_modal_form">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title modal-title-attribute">Thêm thuộc tính</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="attribute_id">Mã thuộc tính</label>
+                                            <input class="form-input form-control" type="text" id="attribute_id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="attribute_name">Tên thuộc tính</label>
+                                            <input class="form-input form-control" type="text" id="attribute_name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="attribute_value">Giá trị thuộc tính</label>
+                                            <input class="form-input form-control" type="text" id="attribute_value">
+                                        </div>
+                                        <span class="message" style="color: red;"></span>
+                                    </form>
+                                </div>
+                                <div class="modal-footer form-btns">
+                                    <button type="button" class="btn btn-success" id="attribute_confirm_btn">Xác nhận</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="attribute_cancel_btn">Hủy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade attribute_delete_modal attribute_modal_hide" id="attribute_delete_modal" role="dialog">
+                        <div class="modal-dialog attribute_modal_form">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title modal-title-attribute">Xóa thuộc tính</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="attribute_id">Mã thuộc tính</label>
+                                            <input class="form-input form-control attribute_delete_id" type="text" id="attribute_id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="attribute_name">Tên thuộc tính</label>
+                                            <input class="form-input form-control attribute_delete_name" type="text" id="attribute_name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="attribute_value">Giá trị thuộc tính</label>
+                                            <input class="form-input form-control attribute_delete_value" type="text" id="attribute_value">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer form-btns">
+                                    <button type="button" class="btn btn-success attribute_confirm_delete_btn" id="attribute_confirm_btn">Xác nhận</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="attribute_cancel_btn">Hủy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
