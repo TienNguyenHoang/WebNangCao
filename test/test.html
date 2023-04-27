@@ -46,9 +46,30 @@
     }
     
     .table-product,
-    .panel-body.statistical {
-        height: 500px;
+    .table-statistical,
+    .table-category,
+    .table-order,
+    .table-account,
+    .table-permission,
+    .table-variant,
+    .table-attribute {
+        padding: 0;
+        max-height: 500px;
         overflow: auto;
+    }
+    
+    .table-product thead,
+    .table-statistical thead,
+    .table-category thead,
+    .table-order thead,
+    .table-account thead,
+    .table-permission thead,
+    .table-variant thead,
+    .table-attribute thead {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        box-shadow: 0px 0px 10px 0px #ccc;
     }
     
     .table-overflow {
@@ -102,13 +123,13 @@
                         <i class="fa-solid fa-chart-pie"></i> Thống kê
                     </li>
                     <li class="sidebar_menu-items attribute list-group-item">
-                        <i class="fa-solid fa-chart-pie"></i> Thuộc tính
+                        <i class="fas fa-tag"></i> Thuộc tính
                     </li>
                     <li class="sidebar_menu-items variant list-group-item">
-                        <i class="fa-solid fa-chart-pie"></i> Biến thể
+                        <i class="fas fa-transgender-alt"></i> Biến thể
                     </li>
                     <li class="sidebar_menu-items permission list-group-item">
-                        <i class="fa-solid fa-chart-pie"></i> Phân quyền
+                        <i class="fas fa-user-lock"></i> Phân quyền
                     </li>
                 </div>
             </div>
@@ -124,7 +145,7 @@
                     </div>
                     <div class="panel panel-primary">
                         <div class="panel-heading">Danh mục</div>
-                        <div class="panel-body">
+                        <div class="panel-body table-category" style="margin: 20px;">
                             <table class="table table-hover">
                                 <thead class="category_body">
                                     <tr class="category_list_header">
@@ -219,10 +240,10 @@
                         </div>
                     </div>
                     <div class="product_tab_body">
-                        <div class="table-product panel panel-primary">
+                        <div class="panel panel-primary">
                             <div class="panel-heading">Sản phẩm</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-product">
+                            <div class="panel-body table-product" style="margin: 20px;">
+                                <table class="table table-hover">
                                     <thead>
                                         <tr class="product_list_header">
                                             <th class="product_list_items">Hình ảnh</th>
@@ -332,7 +353,7 @@
 
                     <div class="panel panel-primary">
                         <div class="panel-heading">Đơn hàng</div>
-                        <div class="panel-body">
+                        <div class="panel-body table-order" style="margin: 20px;">
                             <table class="table table-hover orderNoteTab_body">
                                 <thead>
                                     <tr class="orderNote_list_header">
@@ -379,7 +400,7 @@
                     <div class="account_tab_body">
                         <div class="panel panel-primary">
                             <div class="panel-heading">Tài khoản</div>
-                            <div class="panel-body">
+                            <div class="panel-body table-account" style="margin: 20px;">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr class="account_list_header">
@@ -531,7 +552,7 @@
                     </div>
                     <div class="panel panel-primary">
                         <div class="panel-heading">Sản phẩm</div>
-                        <div class="panel-body statistical">
+                        <div class="panel-body table-statistical" style="margin: 20px;">
                             <table class="table table-hover report_tab_body">
                                 <thead>
                                     <tr class="report_list_header">
@@ -558,7 +579,7 @@
                     </div>
                     <div class="panel panel-primary">
                         <div class="panel-heading">Thuộc tính</div>
-                        <div class="panel-body">
+                        <div class="panel-body table-attribute" style="margin: 20px;">
                             <table class="table table-hover">
                                 <thead class="attribute_body">
                                     <tr class="attribute_list_header">
@@ -659,7 +680,7 @@
                     </div>
                     <div class="panel panel-primary">
                         <div class="panel-heading">Biến thể</div>
-                        <div class="panel-body">
+                        <div class="panel-body table-variant" style="margin: 20px;">
                             <table class="table table-hover variant_body">
                                 <thead>
                                     <tr class="variant_list_header">
@@ -683,12 +704,12 @@
                                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#variantDetail_modal">Xem chi tiết</button>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#variant_delete_modal">
-                                                                <i class="fa-solid fa-trash variant_delete_btn"></i>
-                                                            </button>
-                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#variant_modal">
-                                                                <i class="fa-solid fa-pen-to-square variant_update_btn"></i>
-                                                            </button>
+                                            <button type="button" class="btn btn-danger variant_delete_btn" data-toggle="modal" data-target="#variant_delete_modal">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-success variant_update_btn" data-toggle="modal" data-target="#variant_modal">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -711,29 +732,29 @@
                                                 <div class="row">
                                                     <div class="form-group col-md-6">
                                                         <label for="variant_id">Mã biến thể</label>
-                                                        <input class="form-input form-control" type="text" id="variant_id">
+                                                        <input class="form-input form-control" type="text" id="variant_id" required>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="variant_name">Tên biến thể</label>
-                                                        <input class="form-input form-control" type="text" id="variant_name">
+                                                        <input class="form-input form-control" type="text" id="variant_name" required>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="form-group col-md-6">
                                                         <label for="variant_price">Đơn giá</label>
-                                                        <input class="form-input form-control" type="number" id="variant_price">
+                                                        <input class="form-input form-control" type="number" id="variant_price" required>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="variant_quantity">Số lượng</label>
-                                                        <input class="form-input form-control" type="number" id="variant_quantity">
+                                                        <input class="form-input form-control" type="number" id="variant_quantity" required>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="form-group col-md-12">
                                                         <label for="variant_id_sp">Mã sản phẩm</label>
-                                                        <input class="form-input form-control" type="text" id="variant_id_sp">
+                                                        <input class="form-input form-control" type="text" id="variant_id_sp" required>
                                                     </div>
-                                                    <span class="variant_messege" style="color: red;"></span>
+                                                    <span class="variant_messege" style="color: red;margin-left: 15px;"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -742,16 +763,16 @@
                                             <div class="panel-body">
                                                 <div class="row">
                                                     <div class="form-group col-md-4">
-                                                        <label for="attribute_name">Thuộc tính</label>
-                                                        <select id="attribute_name" class="form-control">
+                                                        <label for="variantAttribute_name">Thuộc tính</label>
+                                                        <select id="variantAttribute_name" class="form-control">
                         
-                                                                        </select>
+                                                        </select>
                                                     </div>
                                                     <div class="form-group col-md-5">
-                                                        <label for="attribute_value">Giá trị</label>
-                                                        <select id="attribute_value" class="form-control">
+                                                        <label for="variantAttribute_value">Giá trị</label>
+                                                        <select id="variantAttribute_value" class="form-control">
                                                                                 
-                                                                        </select>
+                                                        </select>
                                                     </div>
                                                     <div class="btn btn-success col-md-2" style="margin-top: 24px;" id="addAttribute"><i class="fas fa-plus"></i></div>
                                                 </div>
@@ -764,15 +785,16 @@
                                                             <th class="variant_list_items">Actions</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody class="variantDetail_list">
+                                                    <tbody class="variantAttributeDetail_list">
 
                                                     </tbody>
                                                 </table>
+                                                <span class="variantAttribute_messege" style="color: red;"></span>
                                             </div>
                                         </div>
                                         <div class="modal-footer form-btns ">
-                                            <button type="submit " class="btn btn-success " id="variant_confirm_btn ">Xác nhận</button>
-                                            <button type="button " class="btn btn-danger " data-dismiss="modal" id="variant_cancel_btn ">Hủy</button>
+                                            <button type="submit" class="btn btn-success" id="variant_confirm_btn">Xác nhận</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="variant_cancel_btn">Hủy</button>
                                         </div>
                                     </form>
                                 </div>
@@ -802,7 +824,7 @@
                                 </div>
                                 <div class="modal-footer form-btns">
                                     <button type="button" class="btn btn-success variant_confirm_delete_btn" id="variant_delete_confirm_btn">Xác nhận</button>
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="variant_cancel_btn">Hủy</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="variant_delete_cancel_btn">Hủy</button>
                                 </div>
                             </div>
                         </div>
@@ -834,7 +856,6 @@
                                             </tr>
                                         </tbody>
                                     </table>
-
                                 </div>
                                 <div class="modal-footer form-btns">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -842,7 +863,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Permission -->
@@ -857,7 +877,7 @@
                     </div>
                     <div class="panel panel-primary">
                         <div class="panel-heading">Nhóm quyền</div>
-                        <div class="panel-body">
+                        <div class="panel-body table-permission" style="margin: 20px;">
                             <table class="table table-hover permission_body">
                                 <thead>
                                     <tr class="permission_list_header">
@@ -876,8 +896,8 @@
                                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#permissionDetail_modal">Xem chi tiết</button>
                                         </td>
                                         <td class="permission_list_item">
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#permission_delete_modal">
-                                                <i class="fa-solid fa-trash permission_delete_btn"></i>
+                                            <button type="button" class="btn btn-danger permission_delete_btn" data-toggle="modal" data-target="#permission_delete_modal">
+                                                <i class="fa-solid fa-trash"></i>
                                             </button>
                                             <button type="button" class="btn btn-success permission_update_btn" data-toggle="modal" data-target="#permission_modal">
                                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -907,6 +927,7 @@
                                             <label for="permission_name">Tên nhóm quyền</label>
                                             <input class="form-input form-control" type="text" id="permission_name">
                                         </div>
+                                        <span class="permisson-message" style="color: red; margin-left: 10px;"></span>
                                         <table class="table table-hover">
                                             <thead>
                                                 <th></th>
@@ -918,38 +939,38 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Tài khoản</td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Sản phẩm</td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Danh mục</td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Thuộc tính</td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Đơn hàng</td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
-                                                    <td><input type="checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
+                                                    <td><input type="checkbox" class="permisson-checkbox"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -965,7 +986,7 @@
 
                     <div class="modal fade permission_delete_modal permission_modal_hide" id="permission_delete_modal" role="dialog ">
                         <div class="modal-dialog permission_delete_modal_form ">
-                            <div class="modal-content ">
+                            <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title modal-title-permissionDelete">Xóa nhóm quyền</h4>
@@ -1011,38 +1032,38 @@
                                             <!-- dữ liệu cứng -->
                                             <tr>
                                                 <td>Tài khoản</td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
+                                                <td><input type="checkbox" checked disabled></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" checked disabled></td>
+                                                <td><input type="checkbox" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Sản phẩm</td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
+                                                <td><input type="checkbox" checked disabled></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" checked disabled></td>
+                                                <td><input type="checkbox" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Danh mục</td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" checked disabled></td>
+                                                <td><input type="checkbox" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Thuộc tính</td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" checked disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Đơn hàng</td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
-                                                <td><input type="checkbox" readonly></td>
-                                                <td><input type="checkbox" checked="checked" readonly></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" checked disabled></td>
+                                                <td><input type="checkbox" disabled></td>
+                                                <td><input type="checkbox" checked disabled></td>
                                             </tr>
                                             <!-- dữ liệu cứng -->
                                         </tbody>

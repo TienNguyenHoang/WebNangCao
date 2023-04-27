@@ -228,8 +228,8 @@ function renderCategories() {
                 <td class="category_list_items">${item.categoryID}</td>
                 <td class="category_list_items">${item.categoryName}</td>
                 <td class="category_list_items">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#category_delete_modal"><i class="fa-solid fa-trash category_delelte_btn"></i></button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#category_modal"><i class="fa-solid fa-pen-to-square category_update_btn"></i></button>
+                    <button type="button" class="btn btn-danger category_delelte_btn" data-toggle="modal" data-target="#category_delete_modal"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" class="btn btn-success category_update_btn" data-toggle="modal" data-target="#category_modal"><i class="fa-solid fa-pen-to-square"></i></button>
                 </td>
             </tr>
         `
@@ -445,11 +445,11 @@ function renderProducts(arrProducts) {
                 </td>
                 <td class="product_list_items product_name">${item.name}</td>
                 <td class="product_list_items">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#product_delete_modal">
-                        <i class="fa-solid fa-trash product_delete_btn"></i>
+                    <button type="button" class="btn btn-danger product_delete_btn" data-toggle="modal" data-target="#product_delete_modal">
+                        <i class="fa-solid fa-trash"></i>
                     </button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#product_modal">
-                        <i class="fa-solid fa-pen-to-square product_update_btn"></i>
+                    <button type="button" class="btn btn-success product_update_btn" data-toggle="modal" data-target="#product_modal">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                     
                 </td>
@@ -766,11 +766,11 @@ function renderAccount() {
                 </button>
                 </td>
                 <td class="account_list_items">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#account_delete_modal">
-                        <i class="fa-solid fa-trash account_delete_btn"></i>
+                    <button type="button" class="btn btn-danger account_delete_btn" data-toggle="modal" data-target="#account_delete_modal">
+                        <i class="fa-solid fa-trash"></i>
                     </button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#account_modal">
-                        <i class="fa-solid fa-pen-to-square account_update_btn"></i>
+                    <button type="button" class="btn btn-success account_update_btn" data-toggle="modal" data-target="#account_modal">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                 </td>
             </tr>
@@ -1086,8 +1086,8 @@ function renderAttributes() {
                 <td class="attribute_list_items">${item.attributeName}</td>
                 <td class="attribute_list_items">${item.attributeValue}</td>
                 <td class="attribute_list_items">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#attribute_delete_modal"><i class="fa-solid fa-trash attribute_delelte_btn"></i></button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#attribute_modal"><i class="fa-solid fa-pen-to-square attribute_update_btn"></i></button>
+                    <button type="button" class="btn btn-danger attribute_delelte_btn" data-toggle="modal" data-target="#attribute_delete_modal"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" class="btn btn-success attribute_update_btn" data-toggle="modal" data-target="#attribute_modal"><i class="fa-solid fa-pen-to-square"></i></button>
                 </td>
             </tr>
         `
@@ -1311,7 +1311,7 @@ var AttributeValueArray = [
 ]
 localStorage.setItem("AttributeArray", JSON.stringify(AttributeArray))
 localStorage.setItem("AttributeValueArray", JSON.stringify(AttributeValueArray))
-const attributes = document.getElementById('attribute_name');
+const attributes = document.getElementById('variantAttribute_name');
 var variant_action = "";
 
 function renderAttribute(arr) {
@@ -1323,12 +1323,12 @@ function renderAttribute(arr) {
 }
 
 function renderAttributeValue(arr) {
-    const attributeValue = document.getElementById('attribute_value');
-    const selectedAttribute = document.getElementById('attribute_name').value;
+    const attributeValue = document.getElementById('variantAttribute_value');
+    const selectedAttribute = document.getElementById('variantAttribute_name').value;
     str = "";
     arr.forEach(element => {
         if (element.attribute_id == selectedAttribute) {
-            str += `<option value="${element.id}" >${element.name} </option>`;
+            str += `<option value="${element.id}">${element.name}</option>`;
         }
     });
     attributeValue.innerHTML = str;
@@ -1340,14 +1340,14 @@ function clearFormVariant() {
     document.getElementById('variant_price').value = ""
     document.getElementById('variant_quantity').value = ""
     document.getElementById('variant_id_sp').value = ""
-    document.querySelector('.variantDetail_list').innerHTML = ""
     document.querySelector('.variant_messege').innerHTML = "";
     document.querySelector('.variantDetail_messege').innerHTML = "";
+    document.querySelector('.variantAttribute_messege').innerHTML = "";
+    document.querySelector('.variantAttributeDetail_list').innerHTML = "";
 }
-document.getElementById('variant_add_btn').onclick = () => {
-    variant_action = "add"
+
+function setUpFormVariant() {
     clearFormVariant();
-    document.querySelector('.modal-title-variant').innerHTML = "Thêm biến thể"
     var AttributeArray = localStorage.getItem("AttributeArray") ? JSON.parse(localStorage.getItem("AttributeArray")) : [];
     var AttributeValueArray = localStorage.getItem("AttributeValueArray") ? JSON.parse(localStorage.getItem("AttributeValueArray")) : [];
     renderAttribute(AttributeArray);
@@ -1355,106 +1355,158 @@ document.getElementById('variant_add_btn').onclick = () => {
     attributes.addEventListener('change', function() {
         renderAttributeValue(AttributeValueArray);
     });
+    addVariantAttribute();
+}
+document.getElementById('variant_add_btn').onclick = () => {
+    variant_action = "add"
+    document.querySelector('.modal-title-variant').innerHTML = "Thêm biến thể"
+    setUpFormVariant();
 }
 
 function isExistAttribute(attributeOption) {
     var flag = true;
-    document.querySelectorAll('.variantDetail_item').forEach(element => {
-        if (element.firstElementChild.innerHTML === attributeOption) {
+    document.querySelectorAll('.variantAttribute_item').forEach(element => {
+        if (element.firstElementChild.innerHTML.toLowerCase() === attributeOption.trim().toLowerCase()) {
             flag = false;
         }
     });
     return flag;
 }
 
-
-document.getElementById('addAttribute').onclick = () => {
-    const selectedAttribute = document.getElementById('attribute_name');
-    const attributeOption = selectedAttribute.selectedOptions[0];
-    const selectedValue = document.getElementById('attribute_value');
-    const valueOption = selectedValue.selectedOptions[0];
-    if (isExistAttribute(attributeOption.textContent)) {
-        var str = `
-        <tr class="variantDetail_item">
-            <td class="variantDetail_attribute">${attributeOption.textContent}</td>
-            <td class="variantDetail_value ">${valueOption.textContent}</td>
-            <td class="variantDetail_delete "><i class="fa-solid fa-trash product_delete_btn"></i></td>
-        </tr>`;
-        document.querySelector('.variantDetail_list').innerHTML += str;
-        document.querySelector('.variantDetail_messege').innerHTML = "";
-    } else {
-        var str = `${attributeOption.textContent} đã tồn tại`;
-        document.querySelector('.variantDetail_messege').innerHTML = str;
-    }
-
-    const variantDetail_delete = document.querySelectorAll('.variantDetail_delete');
-    variantDetail_delete.forEach(element => {
-        element.onclick = () => {
-            document.querySelector('.variantDetail_list').removeChild(element.parentElement);
+function addVariantAttribute() {
+    document.getElementById('addAttribute').onclick = () => {
+        const selectedAttribute = document.getElementById('variantAttribute_name');
+        const attributeOption = selectedAttribute.selectedOptions[0];
+        const selectedValue = document.getElementById('variantAttribute_value');
+        const valueOption = selectedValue.selectedOptions[0];
+        if (isExistAttribute(attributeOption.textContent)) {
+            var str = `
+            <tr class="variantAttribute_item">
+                <td class="variantAttribute_attribute">${attributeOption.textContent}</td>
+                <td class="variantAttribute_value">${valueOption.textContent}</td>
+                <td class="variantAttribute_delete"><i class="fa-solid fa-trash product_delete_btn"></i></td>
+            </tr>`;
+            document.querySelector('.variantAttributeDetail_list').innerHTML += str;
+            document.querySelector('.variantDetail_messege').innerHTML = "";
+        } else {
+            var str = `${attributeOption.textContent} đã tồn tại`;
+            document.querySelector('.variantDetail_messege').innerHTML = str;
         }
-    })
+        deleteVariantAttribute();
+    }
 }
 
-document.querySelector('.variant_form_submit').onsubmit = (e) => {
-    e.preventDefault();
-    switch (variant_action) {
-        case 'add':
-            document.querySelector(".notification_variant").innerHTML = `
-            <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>Thành công!</strong> Đã thêm một biến thể mới!
-            </div>
-            `
-            break;
-        case 'update':
-            document.querySelector(".notification_variant").innerHTML = `
-            <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>Thành công!</strong> Đã sửa thành công!
-            </div>
-            `
-            break;
-    }
-    document.getElementById("variant_modal").classList.remove("in")
-    document.querySelector('.modal-backdrop').classList.remove("in")
-    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
-    setTimeout(() => {
-        document.getElementById("variant_modal").style.display = "none"
-    }, 1000);
+function deleteVariantAttribute() {
+    const variantDetail_delete = document.querySelectorAll('.variantAttribute_delete');
+    variantDetail_delete.forEach(element => {
+        element.onclick = () => {
+            document.querySelector('.variantAttributeDetail_list').removeChild(element.parentElement);
+        }
+    })
 }
 
 const fixVariantBtns = document.querySelectorAll('.variant_update_btn');
 fixVariantBtns.forEach(fixVariantBtn => {
     fixVariantBtn.onclick = () => {
         variant_action = "update"
-        clearFormVariant();
-        var AttributeArray = localStorage.getItem("AttributeArray") ? JSON.parse(localStorage.getItem("AttributeArray")) : [];
-        var AttributeValueArray = localStorage.getItem("AttributeValueArray") ? JSON.parse(localStorage.getItem("AttributeValueArray")) : [];
-        renderAttribute(AttributeArray);
-        renderAttributeValue(AttributeValueArray);
-        attributes.addEventListener('change', function() {
-            renderAttributeValue(AttributeValueArray);
-        });
         document.querySelector('.modal-title-variant').innerHTML = "Sửa biến thể";
+        setUpFormVariant();
+        // dữ liệu cứng để test
         document.getElementById('variant_id').value = "1"
         document.getElementById('variant_name').value = "S092K1"
         document.getElementById('variant_price').value = "1000000"
         document.getElementById('variant_quantity').value = "200"
         document.getElementById('variant_id_sp').value = "3"
-        document.querySelector('.variantDetail_list').innerHTML = `
-        <tr class="variantDetail_item">
-            <td class="variantDetail_attribute">cpu</td>
-            <td class="variantDetail_value ">Intel</td>
-            <td class="variantDetail_delete "><i class="fa-solid fa-trash product_delete_btn"></i></td>
+        document.querySelector('.variantAttributeDetail_list').innerHTML = `
+        <tr class="variantAttribute_item">
+            <td class="variantAttribute_attribute">cpu</td>
+            <td class="variantAttribute_value">Intel</td>
+            <td class="variantAttribute_delete"><i class="fa-solid fa-trash product_delete_btn"></i></td>
         </tr>
-        <tr class="variantDetail_item">
-            <td class="variantDetail_attribute">ram</td>
-            <td class="variantDetail_value ">8GB</td>
-            <td class="variantDetail_delete "><i class="fa-solid fa-trash product_delete_btn"></i></td>
+        <tr class="variantAttribute_item">
+            <td class="variantAttribute_attribute">ram</td>
+            <td class="variantAttribute_value">8GB</td>
+            <td class="variantAttribute_delete"><i class="fa-solid fa-trash product_delete_btn"></i></td>
         </tr>
         `
+            // dữ liệu cứng để test
     }
 })
+
+function validateFormVariant() {
+    const variant_id = document.getElementById('variant_id').value;
+    const variant_name = document.getElementById('variant_name').value;
+    const variant_price = document.getElementById('variant_price').value;
+    const variant_quantity = document.getElementById('variant_quantity').value;
+    const variant_id_sp = document.getElementById('variant_id_sp').value;
+    const variant_attribute_count = document.querySelector('.variantAttributeDetail_list').childElementCount;
+    var variant_messege = document.querySelector('.variant_messege');
+    var variantAttribute_messege = document.querySelector('.variantAttribute_messege');
+    if (variant_id.trim() == "") {
+        variant_messege.innerHTML = "Mã biến thể đang trống!";
+        return false;
+    }
+    if (variant_name.trim() == "") {
+        variant_messege.innerHTML = "Tên biến thể đang trống!";
+        return false;
+    }
+    if (variant_price.trim() == "") {
+        variant_messege.innerHTML = "Đơn giá đang trống!";
+        return false;
+    }
+    if (variant_price <= 0) {
+        variant_messege.innerHTML = "Đơn giá không hợp lệ!";
+        return false;
+    }
+    if (variant_quantity.trim() == "") {
+        variant_messege.innerHTML = "Số lượng đang trống!";
+        return false;
+    }
+    if (variant_quantity <= 0) {
+        variant_messege.innerHTML = "Số lượng không hợp lệ!";
+        return false;
+    }
+    if (variant_id_sp.trim() == "") {
+        variant_messege.innerHTML = "Mã sản phẩm đang trống!";
+        return false;
+    }
+    if (variant_attribute_count == 0) {
+        variantAttribute_messege.innerHTML = "Vui lòng chọn chi tiết biến thể!";
+        return false;
+    }
+    return true;
+}
+document.querySelector('.variant_form_submit').onsubmit = (e) => {
+    e.preventDefault();
+    if (validateFormVariant()) {
+        switch (variant_action) {
+            case 'add':
+                document.querySelector(".notification_variant").innerHTML = `
+                <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Thành công!</strong> Đã thêm một biến thể mới!
+                </div>
+                `
+                break;
+            case 'update':
+                document.querySelector(".notification_variant").innerHTML = `
+                <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Thành công!</strong> Đã sửa thành công!
+                </div>
+                `
+                break;
+        }
+        document.getElementById("variant_modal").classList.remove("in")
+        document.querySelector('.modal-backdrop').classList.remove("in")
+        document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+        setTimeout(() => {
+            document.getElementById("variant_modal").style.display = "none"
+        }, 1000);
+    }
+}
+
+
 
 document.getElementById('variant_delete_confirm_btn').onclick = () => {
     document.querySelector(".notification_variant").innerHTML = `
@@ -1475,23 +1527,56 @@ document.getElementById('variant_delete_confirm_btn').onclick = () => {
 // ======================================= //
 // ------- nhóm quyền ----------- //
 // ======================================= //
+function clearFormPermission() {
+    document.getElementById('permission_id').value = "";
+    document.getElementById('permission_name').value = "";
+    document.querySelector('.permisson-message').innerHTML = "";
+    var arr = document.querySelectorAll('.permisson-checkbox');
+    arr.forEach(element => {
+        if (element.checked) {
+            element.checked = false;
+        }
+    })
+}
+
+function validateFormPermission() {
+    const permission_id = document.getElementById('permission_id').value;
+    const permission_name = document.getElementById('permission_name').value;
+    var permisson_message = document.querySelector('.permisson-message');
+    if (permission_id.trim() == "") {
+        permisson_message.innerHTML = "Mã nhóm quyền đang trống!";
+        return false;
+    }
+    if (permission_name.trim() == "") {
+        permisson_message.innerHTML = "Tên nhóm quyền đang trống!";
+        return false;
+    }
+    return true;
+}
 document.querySelector('.permission_update_btn').onclick = () => {
+    clearFormPermission();
     document.querySelector('.modal-title-permission').innerHTML = "Sửa nhóm quyền"
+}
+document.getElementById('permission_add_btn').onclick = () => {
+    clearFormPermission();
+    document.querySelector('.modal-title-permission').innerHTML = "Thêm nhóm quyền"
 }
 document.getElementById("permission_confirm_btn").onclick = (e) => {
     e.preventDefault();
-    document.querySelector(".notification_permission").innerHTML = `
-    <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Thành công!</strong> Đã thêm thành công một nhóm quyền mới!
-    </div>
-    `
-    document.getElementById("permission_modal").classList.remove("in")
-    document.querySelector('.modal-backdrop').classList.remove("in")
-    document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
-    setTimeout(() => {
-        document.getElementById("permission_modal").style.display = "none"
-    }, 1000);
+    if (validateFormPermission()) {
+        document.querySelector(".notification_permission").innerHTML = `
+        <div class="alert alert-success alert-dismissible fade in" style='position: absolute;top: 10px;right: 10px;'>
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Thành công!</strong> Đã thêm thành công một nhóm quyền mới!
+        </div>
+        `
+        document.getElementById("permission_modal").classList.remove("in")
+        document.querySelector('.modal-backdrop').classList.remove("in")
+        document.querySelector("body").removeChild(document.querySelector('.modal-backdrop'))
+        setTimeout(() => {
+            document.getElementById("permission_modal").style.display = "none"
+        }, 1000);
+    }
 }
 
 document.getElementById("permission_delete_confirm_btn").onclick = (e) => {
