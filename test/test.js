@@ -1105,6 +1105,31 @@ const attributeCancelBtn = attributeModal.querySelector("#attribute_cancel_btn")
 const attributeSubmitBtn = attributeModal.querySelector("#attribute_confirm_btn")
 let attribute_form_action = ""
 
+// --------------- validate form thuộc tính ---------------- //
+
+function validateFormAttribute() {
+    const attributeId = document.querySelector("#attributeId").value
+    const attributeName = document.querySelector("#attributeName").value
+    const attributeValue = document.querySelector("#attributeValue").value
+    if (attributeId === "") {
+        document.querySelector(".message").innerText = "ID thuộc tính không được để trống"
+        return false
+    }
+    if (attributeName === "") {
+        document.querySelector(".message").innerText = "Tên thuộc tính không được để trống"
+        return false
+    }
+    if (attributeValue === "") {
+        document.querySelector(".message").innerText = "Giá trị thuộc tính không được để trống"
+        return false
+    }
+    if (attr.some((item) => { return item.attributeName == attributeName })) {
+        document.querySelector(".messege").innerText = "Tên thuộc tính bị trùng"
+        return false
+    }
+    else
+        return true
+}
 
 // --------------- thêm thuộc tính ---------------- //
 
@@ -1131,20 +1156,7 @@ attributeSubmitBtn.onclick = (e) => {
     let attributeName = document.querySelector("#attributeName").value
     let attributeValue = document.querySelector("#attributeValue").value
     let flag = true
-    if (attributeId === "") {
-        document.querySelector(".message").innerText = "ID thuộc tính không được để trống"
-        return
-    }
-    if (attributeName === "") {
-        document.querySelector(".message").innerText = "Tên thuộc tính không được để trống"
-        return
-    }
-    if (attributeValue === "") {
-        document.querySelector(".message").innerText = "Giá trị thuộc tính không được để trống"
-        return
-    }
-    if (attr.some((item) => { return item.attributeName == attributeName })) {
-        document.querySelector(".messege").innerText = "Tên thuộc tính bị trùng"
+    if (!validateFormAttribute) {
         return
     } else {
         switch (attribute_form_action) {
